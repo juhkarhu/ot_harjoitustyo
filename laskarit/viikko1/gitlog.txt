@@ -1,0 +1,103 @@
+(base) juhanaka@lx0-fuxi253:~/Koulu/OHTE/viikko1/tiedostoja$ git log --stat | cat
+commit 17e00a7696bfc10c981ee76795eef3ca61fb2248
+Author: Juhana Karhunen <juhana.karhunen@gmail.com>
+Date:   Tue Mar 16 14:36:41 2021 +0200
+
+    file muutoksia
+
+ tiedostoja/{file2.txt => file22.txt} | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit f8ccd00f11e850e346f6add72e72baf5c5bb9372
+Author: Juhana Karhunen <juhana.karhunen@gmail.com>
+Date:   Tue Mar 16 14:35:35 2021 +0200
+
+    tiedostoja
+
+ tiedostoja/file1.txt | 0
+ tiedostoja/file2.txt | 0
+ tiedostoja/file3.txt | 0
+ 3 files changed, 0 insertions(+), 0 deletions(-)
+
+commit e9383d6e84e63e32a03df00c965e68c042997d3c
+Author: Juhana Karhunen <juhana.karhunen@gmail.com>
+Date:   Tue Mar 16 14:32:25 2021 +0200
+
+    eka ja kolmas muutoksia
+
+ eka.txt    | 2 ++
+ kolmas.txt | 1 +
+ 2 files changed, 3 insertions(+)
+
+commit 853017f0798aa17b1e93bd58533cf805e792af52
+Author: Juhana Karhunen <juhana.karhunen@gmail.com>
+Date:   Tue Mar 16 14:31:22 2021 +0200
+
+    tiedosto.txt muutettu eka.txtksi
+
+ tiedosto.txt => eka.txt | 0
+ toinen.txt              | 0
+ 2 files changed, 0 insertions(+), 0 deletions(-)
+
+commit e092ac477c1516735edd94984cf417c28c0c800b
+Author: Juhana Karhunen <juhana.karhunen@gmail.com>
+Date:   Tue Mar 16 14:29:43 2021 +0200
+
+    toinen.txt luotu
+
+ toinen.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit a77c92015174947c2d007fef022db5b7b0a80bf2
+Author: Juhana Karhunen <juhana.karhunen@gmail.com>
+Date:   Tue Mar 16 14:28:08 2021 +0200
+
+    tiedosto.txt säädetty
+
+ tiedosto.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit 99974ada93ecd43ec5f0a4946b437574976367f8
+Author: Juhana Karhunen <juhana.karhunen@gmail.com>
+Date:   Tue Mar 16 14:27:27 2021 +0200
+
+    lorem lipsum tiedosto.txthen
+
+ tiedosto.txt | 2 ++
+ 1 file changed, 2 insertions(+)
+
+commit 9f1ff034d2691de086c64fda1480768783c8ce90
+Author: Juhana Karhunen <juhana.karhunen@gmail.com>
+Date:   Tue Mar 16 14:25:00 2021 +0200
+
+    stuff ja stuff.txt luotu
+
+ stuff/stuff.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit 618ffd510b8a6ea86394283303d544686769080b
+Author: Juhana Karhunen <juhana.karhunen@gmail.com>
+Date:   Tue Mar 16 14:24:27 2021 +0200
+
+    kolmas.txt luotu
+
+ kolmas.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit b5e3b60a86d5e2991a34419fe3bfb9eb5a6c31f0
+Author: Juhana Karhunen <juhana.karhunen@gmail.com>
+Date:   Tue Mar 16 14:22:48 2021 +0200
+
+    muutos ja lisäys
+
+ tiedosto.txt | 1 +
+ 1 file changed, 1 insertion(+)
+
+commit 7f2ef54eee59d458cfbde7efc5c48672d0c8b2f3
+Author: Juhana Karhunen <juhana.karhunen@gmail.com>
+Date:   Tue Mar 16 14:21:35 2021 +0200
+
+    tiedosto.txt luotu
+
+ tiedosto.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
