@@ -101,3 +101,5 @@ Date:   Tue Mar 16 14:21:35 2021 +0200
 
  tiedosto.txt | 0
  1 file changed, 0 insertions(+), 0 deletions(-)
+
+Testataan epäsynkroonitilannetta.
