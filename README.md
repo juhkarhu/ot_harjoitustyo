@@ -1,5 +1,7 @@
 # Ohjelmistotekniikka 2021 
 
+Epäsynkroonin testaus
+
 Repositorio **kurssilla** tehtyjä *tehtäviä* varten. 
 
 Viikko 1
