@@ -7,7 +7,7 @@ Pisteitä saa nopeudesta, kaikkien hahmojen tuomisesta kentän loppuun ja viholl
 
 ### Aloitusruutuluonnos
 Sovellus käynnistyy aloitusruutuun, josta voi valita haluamansa vaikeustason (vaikuttaa ainakin pelaajan hahmojen hitpointteihin). 
-![Image of aloitusruutu](harkkatyo/Documents/aloitusruutu.png)
+![aloitusruutu](https://user-images.githubusercontent.com/62934996/112617265-67bc5380-8e2d-11eb-96ee-487f88889ac0.png)
 
 
 ### Tasohyppely
