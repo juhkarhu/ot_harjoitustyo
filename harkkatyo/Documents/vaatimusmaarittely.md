@@ -20,5 +20,5 @@ Aloitusruudun sivussa voisi olla highscore-lista.
 - Viholliset spawnaavat takaisin jonkin ajan kuluttua. 
 
 
+### Jatkokehitysideoita
 - Kenttäeditori
-- 
