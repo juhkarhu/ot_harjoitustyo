@@ -10,5 +10,5 @@ Viikko 1
 
 
 Viikko 2
-- [vaatimusmaarittely](./harkkatyo/Documents/vaatimusmaarittely.md)
-- [tuntikirjanpito](./harkkatyo/Documents/tuntikirjanpito.md)
+- [vaatimusmaarittely](./Documents/vaatimusmaarittely.md)
+- [tuntikirjanpito](./Documents/tuntikirjanpito.md)
