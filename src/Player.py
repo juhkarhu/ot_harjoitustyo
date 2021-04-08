@@ -14,7 +14,7 @@ class Player(pygame.sprite.Sprite):
         self.jumped = False
 
 
-        # Tämä määrittää jos lemming voi nousta edessä olevien esteiden päälle itsestään?
+        # Defines if character can climb the obstacle in front of it automatically
         self.climbheight = 4
         self.player_controlled = False
         self.dig = False
