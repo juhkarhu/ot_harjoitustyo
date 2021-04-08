@@ -13,6 +13,10 @@ class Player(pygame.sprite.Sprite):
         self.speed = speed
         self.jumped = False
 
+        # import os.path
+        # path = f'{os.getcwd()}/img/{self.character_type}/{animation}'
+        # num_files = len([f for f in os.listdir(path)if os.path.isfile(os.path.join(path, f))])
+        # print(num_files)
 
         # Defines if character can climb the obstacle in front of it automatically
         self.climbheight = 4
@@ -29,7 +33,13 @@ class Player(pygame.sprite.Sprite):
         animation_types = ['idle', 'run', 'jump']
         for animation in animation_types:
             temp_list = []
-            num_of_frames = len(os.listdir(f'img/{self.character_type}/{animation}'))
+            # Ei toiminut laitoksen koneella.
+            # num_of_frames = len(os.listdir(f'img/{self.character_type}/{animation}'))
+
+            # Hakee ensin sovelluksen sijainnin ja sitten tutkii kansiot. 
+            path = f'{os.getcwd()}/img/{self.character_type}/{animation}'
+            num_of_frames = len([f for f in os.listdir(path)if os.path.isfile(os.path.join(path, f))])
+
             for i in range(num_of_frames):
                 img = pygame.image.load(f'img/{self.character_type}/{animation}/{i}.png').convert_alpha()
                 img = pygame.transform.scale(img, (int(img.get_width() * scale), int(img.get_height() * scale)))
