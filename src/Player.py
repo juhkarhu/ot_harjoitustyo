@@ -12,12 +12,6 @@ class Player(pygame.sprite.Sprite):
         self.character_type = character_type
         self.speed = speed
         self.jumped = False
-
-        # import os.path
-        # path = f'{os.getcwd()}/img/{self.character_type}/{animation}'
-        # num_files = len([f for f in os.listdir(path)if os.path.isfile(os.path.join(path, f))])
-        # print(num_files)
-
         # Defines if character can climb the obstacle in front of it automatically
         self.climbheight = 4
         self.player_controlled = False
@@ -30,7 +24,8 @@ class Player(pygame.sprite.Sprite):
         self.update_time = pygame.time.get_ticks()
         self.animation_list = []
         self.bullet_image = pygame.image.load('./img/icons/bullet.png').convert_alpha()
-        animation_types = ['idle', 'run', 'jump']
+        # animation_types = ['idle', 'run', 'jump']
+        animation_types = ['idle', 'run', 'jump', 'attack', 'death']
         for animation in animation_types:
             temp_list = []
             # Ei toiminut laitoksen koneella.
@@ -39,14 +34,15 @@ class Player(pygame.sprite.Sprite):
             # Hakee ensin sovelluksen sijainnin ja sitten tutkii kansiot. 
             path = f'{os.getcwd()}/img/{self.character_type}/{animation}'
             num_of_frames = len([f for f in os.listdir(path)if os.path.isfile(os.path.join(path, f))])
-
             for i in range(num_of_frames):
+                # img = self.convert(f'img/{self.character_type}/{animation}/{i}.png')
                 img = pygame.image.load(f'img/{self.character_type}/{animation}/{i}.png').convert_alpha()
                 img = pygame.transform.scale(img, (int(img.get_width() * scale), int(img.get_height() * scale)))
                 temp_list.append(img)
             self.animation_list.append(temp_list)
         self.image = self.animation_list[self.action][self.frame_index]
         self.rect = self.image.get_rect()
+        self.mask = pygame.mask.from_surface(self.image)
         # self.mask = pygame.mask.from_surface(self.image)
         self.rect.center = (x, y)
 
@@ -57,11 +53,10 @@ class Player(pygame.sprite.Sprite):
         return self.id
 
     def take_control(self):
-        # self.kill()
-        self.player_controlled ^= True
+        self.player_controlled = True
 
-    # def give_control(self):
-    #     self.player_controlled = False
+    def give_control(self):
+        self.player_controlled = False
 
     def update(self, map, left, right):
         if self.in_air: # Jumping or falling
@@ -75,7 +70,7 @@ class Player(pygame.sprite.Sprite):
         movement_x = 0
         movement_y = 0
 
-        # Lemming is being controlled by the player
+        # Character is being controlled by the player
         if self.player_controlled:
             key = pygame.key.get_pressed()
 
@@ -99,7 +94,7 @@ class Player(pygame.sprite.Sprite):
                 self.direction = 1
 
             
-        # Lemming is not being controlled by the player
+        # Character is not being controlled by the player
         else:
             if self.direction < 0:
                 self.flip = True
@@ -107,14 +102,11 @@ class Player(pygame.sprite.Sprite):
                 self.flip = False
             self.rect.x += (1 * self.direction)
         self.velocity_y += GRAVITY
-                        
-        # One can fall regardless of being controlled or not
-        # if self.velocity_y > 10:
-        #     self.velocity_y = 10        
+                             
         movement_y += self.velocity_y
 
 
-        # check for collision
+        '''Check for collision with the ground'''
         for tile in map:
             # Check is characters collide with wall to their left and turn them as needed.
             if tile[1].colliderect(self.rect.x + movement_x, self.rect.y, self.rect.width, self.rect.height):                
@@ -135,7 +127,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.x += movement_x
         self.rect.y += movement_y
     
-
+    '''Draw player on the screen and update animations as needed'''
     def draw(self, screen):
         self.update_animation()
         screen.blit(pygame.transform.flip(
@@ -159,7 +151,8 @@ class Player(pygame.sprite.Sprite):
             self.frame_index = 0
             self.update_time = pygame.time.get_ticks()
 
-    # This is not needed anymore, I think..
+    # This is not needed anymore, I think.. Map was previously done in a different manner. 
+    # I've moved to a simpler approach and this isn't needed. Keeping this just-in-case.
     def ground_at_position(self, pos, map):
         if map[pos[1]][pos[0]] != 0:
             return True
