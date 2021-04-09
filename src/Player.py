@@ -58,6 +58,33 @@ class Player(pygame.sprite.Sprite):
     def give_control(self):
         self.player_controlled = False
 
+
+    def collision_test(self, tiles):
+        collision = []
+        for tile in tiles:
+            if pygame.self.rect.colliderect(tile):
+                collision.append(tile)
+        return collision
+
+    def move(self, movement, tiles):
+        self.rect.x += movement[0]
+        collision = self.collision_test(self.rect, tiles)
+        for tile in collision:
+            if movement[0] > 0:
+                self.rect.right = tile.left
+            if movement[0] < 0:
+                self.rect.left = tile.right
+
+        self.rect.y += movement[1]
+        collision = self.collision_test(self.rect, tiles)
+        for tile in collision:
+            if movement[1] > 0:
+                self.rect.bottom = tile.top
+            if movement[1] < 0:
+                self.rect.top = tile.bottom
+
+
+
     def update(self, map, left, right):
         if self.in_air: # Jumping or falling
             self.update_action(2)
@@ -73,16 +100,12 @@ class Player(pygame.sprite.Sprite):
         # Character is being controlled by the player
         if self.player_controlled:
             key = pygame.key.get_pressed()
-
             if key[pygame.K_w] and self.jumped == False and self.in_air == False:
                 self.velocity_y = -13
                 self.jumped = True
                 self.in_air = True
             if key[pygame.K_w] == False:
                 self.jumped = False
-
-            
-            # Movement to the left
             if left:
                 movement_x = -self.speed
                 self.flip = True
@@ -92,8 +115,7 @@ class Player(pygame.sprite.Sprite):
                 movement_x = self.speed
                 self.flip = False
                 self.direction = 1
-
-            
+   
         # Character is not being controlled by the player
         else:
             if self.direction < 0:
@@ -101,12 +123,15 @@ class Player(pygame.sprite.Sprite):
             else:
                 self.flip = False
             self.rect.x += (1 * self.direction)
-        self.velocity_y += GRAVITY
-                             
+        
+        self.velocity_y += GRAVITY                 
         movement_y += self.velocity_y
 
 
         '''Check for collision with the ground'''
+        # if pygame.sprite.spritecollide(self, map, False, pygame.sprite.collide_mask):
+        #     self.rect.bottom = 
+            
         for tile in map:
             # Check is characters collide with wall to their left and turn them as needed.
             if tile[1].colliderect(self.rect.x + movement_x, self.rect.y, self.rect.width, self.rect.height):                
