@@ -16,6 +16,7 @@ Ohjelma ainut vaatimus pygame-kirjasto.
 Asenna riippuvuudet:
 ```bash
 poetry install
+```
 
 Ohjelman voi suorittaa komennolla:
 ```
