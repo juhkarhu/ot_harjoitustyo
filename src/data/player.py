@@ -8,7 +8,7 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
 
         self.id = id
-        print('pelaajan starting_pos', starting_pos, type(starting_pos))
+        
         self.control = False
         self.speed = 2
         self.moving_right = False
@@ -20,7 +20,7 @@ class Player(pygame.sprite.Sprite):
         self.in_air = False
         self.flip = False
         self.load_images(character_type, scale, starting_pos)
-
+        
   
     def load_images(self, character_type, scale, starting_pos):
         # All the animations have the same image as placeholder. Easy enough to edit if time allows. 
@@ -51,9 +51,7 @@ class Player(pygame.sprite.Sprite):
         self.control = True
 
     def give_control(self):
-        self.control = False
-
-    
+        self.control = False 
 
     def update(self, display, tile_rects, left, right, jump):
         if self.control:
@@ -98,7 +96,6 @@ class Player(pygame.sprite.Sprite):
 
         collisions = self.move(self.player_movement, tile_rects)
 
-
         if collisions['right'] or collisions['left'] and not self.control:
             self.direction *= -1
         if collisions['bottom']:
@@ -113,19 +110,11 @@ class Player(pygame.sprite.Sprite):
             self.flip = False
         if self.player_movement[0] < 0:
             self.flip = True
-        
+
         self.image = pygame.transform.flip(self.image, self.flip, False)
         self.image.set_colorkey((255,255,255))
         display.blit(self.image, (self.rect.x, self.rect.y))
 
-
-
-    def collision_test(self, rect, tiles):
-        self.hit_list = []
-        for tile in tiles:
-            if rect.colliderect(tile):
-                self.hit_list.append(tile)
-        return self.hit_list
 
     '''Testing if the player can move to the desired location. First checking which tiles the player hits if moved in the x-plane,
     memorizing the tiles that were hit, and checking based on movement whether those were in the way. After that, the same for the 
@@ -151,6 +140,14 @@ class Player(pygame.sprite.Sprite):
                 self.rect.top = tile.bottom
                 self.collision_types['top'] = True
         return self.collision_types
+
+    ''' Returns all the tiles that player is hitting.'''
+    def collision_test(self, rect, tiles):
+        self.hit_list = []
+        for tile in tiles:
+            if rect.colliderect(tile):
+                self.hit_list.append(tile)
+        return self.hit_list
 
 
     def update_animation(self):

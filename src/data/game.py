@@ -10,13 +10,14 @@ from data.world import *
 class Game:
     def __init__(self):
         pygame.init()
+        self.set_up_player_variables()
         self.load_game_data()
         self.read_map_data()
-        self.set_up_player_variables()
+        
         self.game_loop()
 
     def set_up_player_variables(self):
-
+        self.character_scale = 3
         self.control = False
         self.left = False
         self.right = False
@@ -43,7 +44,6 @@ class Game:
 
         self.load_tile_images()      
 
-        self.TILE_SIZE = self.grass_image.get_width()
         self.game_map = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -76,7 +76,7 @@ class Game:
         self.screen_width = SCALA * self.width
         self.WINDOW_SIZE = (self.screen_height, self.screen_width)
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
-        pygame.display.set_caption('Lemmingki')
+        pygame.display.set_caption('Lemminki')
         # self.display = pygame.Surface((300, self.screen_width))
     
     def check_events(self):
@@ -112,7 +112,7 @@ class Game:
             if event.type == self.ADD_LEMMING:
                 if self.num_of_players_spawned < self.max_players:
                     id = os.urandom(16).hex()
-                    new_player = Player('player', 4, (self.starting_position), id)
+                    new_player = Player('player', self.character_scale, (self.starting_position), id)
                     self.player_sprites.add(new_player)
                     self.num_of_players_spawned += 1
             else:
@@ -190,10 +190,13 @@ class Game:
                     self.map_sprites.add(tile)
                 if tile == 3:
                     id = os.urandom(16).hex()
-                    new_npc = Enemy('enemy', 4, (x * TILE_SIZE, y * TILE_SIZE), id)
+                    new_npc = Enemy('enemy', self.character_scale, (x * TILE_SIZE, y * TILE_SIZE), id)
                     self.npc_list.add(new_npc)
-                x += 1
-            y += 1
+                if tile == 8:
+                    door = Door(x * TILE_SIZE, y * TILE_SIZE)
+                    self.map_sprites.add(door)
+
+
 
     def draw_screen(self):
         self.screen.fill((146,244,255))
