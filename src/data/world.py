@@ -1,5 +1,5 @@
 import pygame
-from SETTINGS import *
+from data.SETTINGS import *
 
 
 class Door(pygame.sprite.Sprite):

@@ -1,6 +1,6 @@
 import pygame, os
 from pygame.locals import *
-from SETTINGS import *
+from data.SETTINGS import *
 
 
 class Player(pygame.sprite.Sprite):

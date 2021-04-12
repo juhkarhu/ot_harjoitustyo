@@ -7,8 +7,12 @@ def start(ctx):
 
 @task
 def coverage(ctx):
-    ctx.run("coverage run --branch -m pytest src")
+    ctx.run("coverage run --branch -m pytest")
 
 @task(coverage)
 def coverage_report(ctx):
     ctx.run("coverage html")
+
+@task
+def test(ctx):
+    ctx.run('pytest')

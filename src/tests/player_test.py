@@ -1,12 +1,16 @@
 import unittest
-import pygame
-from Game import *
-from Player import *
+from data.player import *
 
 class TestPlayerClass(unittest.TestCase):
     def setUp(self):
-        # peli = Game()
-        new_lemming = Player('player', 1, 1, 1.3, 5, id)
+        print('set up goes here') 
+        pygame.init()
+        self.screen = pygame.display.set_mode((800, 600))
+        self.new_player = Player('player', 4, (100, 100), id)
+        
 
-    def test_all_animations_load(self):
-        self.assertEqual(self.new_lemming.get_animation_list(), 3)
+    def test_animation_list(self):
+        # Player has 5 different animation states
+        self.assertEqual(len(self.new_player.animation_list), 5)
+        # Each state has one (1) frame at the moment. 
+        self.assertEqual(len(self.new_player.animation_list[0]), 1)

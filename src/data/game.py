@@ -1,10 +1,10 @@
 import pygame, sys, os
 from pygame.locals import *
 from pygame.constants import MOUSEBUTTONDOWN
-from player import Player
-from enemy import Enemy
-from SETTINGS import *
-from world import *
+from data.player import Player
+from data.enemy import Enemy
+from data.SETTINGS import *
+from data.world import *
 
 
 class Game:
@@ -202,5 +202,3 @@ class Game:
             player.update(self.screen, self.tile_rects, self.left, self.right, self.jump)
         for npc in self.npc_list:
             npc.ai(self.screen, self.tile_rects, self.left, self.right, self.jump)
-
-peli = Game()
