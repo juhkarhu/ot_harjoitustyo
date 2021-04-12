@@ -18,19 +18,17 @@ Asenna riippuvuudet:
 poetry install
 
 Ohjelman voi suorittaa komennolla:
-```bash
+```
 poetry run invoke start
 ```
 #### Testaus
 Testit suoritetaan komennolla:
-```bash
+```
 poetry run invoke test
-#### Testikattavuus
-Testikattavuuden voi tarkistaa komennolla:
-```bash
-poetry run invoke coverage-report
 ```
 
-
-#### Testaus
-Testaus on vielä keskeneräinen, joten se ei ole vielä toiminnassa. 
+#### Testikattavuus
+Testikattavuuden voi tarkistaa komennolla:
+```
+poetry run invoke coverage-report
+```
