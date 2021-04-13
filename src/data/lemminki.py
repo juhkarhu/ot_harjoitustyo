@@ -1,7 +1,6 @@
 import pygame, os
-from pygame.locals import *
 import data.SETTINGS
-from data.world import Rock
+import data.world
 
 
 class Lemminki(pygame.sprite.Sprite):
@@ -10,6 +9,7 @@ class Lemminki(pygame.sprite.Sprite):
 
         self.id = id
         self.move_counter = 0
+        self.throw_cooldown = 0
         self.control = False
         self.speed = 2
         self.moving_right = False
@@ -56,10 +56,12 @@ class Lemminki(pygame.sprite.Sprite):
     def give_control(self):
         self.control = False 
 
-    def throw_rock(self):
-        rock = Rock(self.rect.centerx + (self.direction * self.rect.width), self.rect.centery, self.direction)
-        self.thrown_rocks.add(rock)
-        
+    # def throw_rock(self):
+    #     if self.throw_cooldown == 0:
+    #         self.throw_cooldown = 30
+    #         rock = data.world.Rock(self.rect.centerx + (self.direction * self.rect.width), self.rect.centery, self.direction)
+    #         self.thrown_rocks.add(rock)
+       
     def ai(self, display, tile_rects, left, right, jump, shoot):
         self.move_counter += 1
         self.update(display, tile_rects, left, right, jump, shoot)
@@ -73,8 +75,9 @@ class Lemminki(pygame.sprite.Sprite):
                 self.direction = -1
             if right:
                 self.direction = 1
-            if shoot and len(self.thrown_rocks) < 1000:
-                self.throw_rock()
+            if shoot:
+                pass
+                # self.throw_rock()
             self.moving_left = left
             self.moving_right = right
 
@@ -132,8 +135,8 @@ class Lemminki(pygame.sprite.Sprite):
             self.flip = True
 
         # Drawing methods for the player and thrown rocks
-        self.thrown_rocks.update()
-        self.thrown_rocks.draw(display)
+        # self.thrown_rocks.update()
+        # self.thrown_rocks.draw(display)
         self.image = pygame.transform.flip(self.image, self.flip, False)
         self.image.set_colorkey((255,255,255))
         display.blit(self.image, (self.rect.x, self.rect.y))

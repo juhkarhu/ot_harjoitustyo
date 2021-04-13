@@ -1,9 +1,9 @@
 import pygame, sys, os
-from pygame.locals import *
+import pygame.locals
 from pygame.constants import MOUSEBUTTONDOWN
 import data.lemminki
 import data.SETTINGS
-from data.world import *
+import data.world
 
 
 class Game:
@@ -17,6 +17,7 @@ class Game:
 
     def set_up_player_variables(self):
         self.character_scale = 3
+        self.throw_cooldown = 0
         self.control = False
         self.left = False
         self.right = False
@@ -41,7 +42,7 @@ class Game:
         self.player_sprites = pygame.sprite.Group()
         self.map_sprites = pygame.sprite.Group()
         self.door_list = pygame.sprite.Group()
-        self.flying_projectiles = pygame.sprite.Group()
+        self.thrown_rocks = pygame.sprite.Group()
         self.num_of_players_spawned = 0
 
         self.load_tile_images()      
@@ -82,21 +83,26 @@ class Game:
     
     def check_events(self):
         for event in pygame.event.get():
-            if event.type == QUIT:
+            if event.type == pygame.locals.QUIT:
                 pygame.quit()
                 sys.exit() 
-            if event.type == KEYDOWN:
-                if event.key == K_ESCAPE:
+            if event.type == pygame.locals.KEYDOWN:
+                if event.key == pygame.locals.K_ESCAPE:
                     pygame.quit()
                     sys.exit()
-                if event.key == pygame.K_a:
-                    self.left = True
-                if event.key == pygame.K_d:
-                    self.right = True
-                if event.key == pygame.K_SPACE:
-                    self.shoot = True
-                if event.key == pygame.K_w and not self.jump:
-                    self.jump = True
+                if self.control:
+                    if event.key == pygame.K_a:
+                        self.left = True
+                    if event.key == pygame.K_d:
+                        self.right = True
+                    if event.key == pygame.K_SPACE:
+                        if self.throw_cooldown == 0:
+                            self.throw_cooldown = 25
+                            rock = data.world.Rock(self.player.rect.centerx + (self.player.direction * self.player.rect.width), self.player.rect.centery, self.player.direction)
+                            self.thrown_rocks.add(rock)
+                        self.shoot = True
+                    if event.key == pygame.K_w and not self.jump:
+                        self.jump = True
 
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_a:
@@ -164,6 +170,8 @@ class Game:
 
     def game_loop(self):
         while True:
+            if self.throw_cooldown > 0:
+                self.throw_cooldown -= 1
             self.clock.tick(60)
             self.draw_screen()
             self.check_events()
@@ -188,18 +196,18 @@ class Game:
                     self.tile_rects.append(pygame.Rect(x * data.SETTINGS.TILE_SIZE, y * data.SETTINGS.TILE_SIZE, data.SETTINGS.TILE_SIZE, data.SETTINGS.TILE_SIZE))
                 if tile == 1:
                     self.tile_rects.append(pygame.Rect(x * data.SETTINGS.TILE_SIZE, y * data.SETTINGS.TILE_SIZE, data.SETTINGS.TILE_SIZE, data.SETTINGS.TILE_SIZE))
-                    tile = Tile(x * data.SETTINGS.TILE_SIZE, y * data.SETTINGS.TILE_SIZE, self.dirt_image)
+                    tile = data.world.Tile(x * data.SETTINGS.TILE_SIZE, y * data.SETTINGS.TILE_SIZE, self.dirt_image)
                     self.map_sprites.add(tile)
                 if tile == 2:
                     self.tile_rects.append(pygame.Rect(x * data.SETTINGS.TILE_SIZE, y * data.SETTINGS.TILE_SIZE, data.SETTINGS.TILE_SIZE, data.SETTINGS.TILE_SIZE))
-                    tile = Tile(x * data.SETTINGS.TILE_SIZE, y * data.SETTINGS.TILE_SIZE, self.grass_image)
+                    tile = data.world.Tile(x * data.SETTINGS.TILE_SIZE, y * data.SETTINGS.TILE_SIZE, self.grass_image)
                     self.map_sprites.add(tile)
                 if tile == 3:
                     id = os.urandom(16).hex()
                     new_npc = data.lemminki.Lemminki('enemy', self.character_scale, (x * data.SETTINGS.TILE_SIZE, y * data.SETTINGS.TILE_SIZE), id)
                     self.npc_list.add(new_npc)
                 if tile == 8:
-                    door = Door(x * data.SETTINGS.TILE_SIZE, y * data.SETTINGS.TILE_SIZE)
+                    door = data.world.Door(x * data.SETTINGS.TILE_SIZE, y * data.SETTINGS.TILE_SIZE)
                     self.map_sprites.add(door)
                     self.door_list.add(door)
 
@@ -208,12 +216,18 @@ class Game:
     def draw_screen(self):
         self.screen.fill((146,244,255))
         self.map_sprites.draw(self.screen)
-        self.flying_projectiles.draw(self.screen)
+        self.thrown_rocks.update()
+        self.thrown_rocks.draw(self.screen)
         if self.control:
             for door in self.door_list:
                 if self.player.rect.colliderect(door.rect):
                     #TODO Onko kaikki paasseet loppuun.
                     print('one point awarded')
+        for rock in self.thrown_rocks:
+            for npc in self.npc_list:
+                if rock.rect.colliderect(npc.rect):
+                    print('point for hitting enemy. Enemy goes to sleep for X amount of time before he wakes back up.')
+        
         for player in self.player_sprites:
             player.update(self.screen, self.tile_rects, self.left, self.right, self.jump, self.shoot)
         for npc in self.npc_list:
