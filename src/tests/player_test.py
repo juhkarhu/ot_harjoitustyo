@@ -2,7 +2,7 @@ from typing import NewType
 import unittest
 from data.player import *
 from data.world import *
-from data.SETTINGS import *
+import data.SETTINGS
 
 class TestPlayerClass(unittest.TestCase):
     def setUp(self):
@@ -22,10 +22,10 @@ class TestPlayerClass(unittest.TestCase):
         for y, row in enumerate(self.test_map):
             for x, tile in enumerate(row):
                 if tile == 10:
-                    self.new_player = Player('player', 2, (x * TILE_SIZE, y * TILE_SIZE), 1)
-                    self.starting_position = (x * TILE_SIZE, y * TILE_SIZE)
+                    self.new_player = Player('player', 2, (x * data.SETTINGS.TILE_SIZE, y * data.SETTINGS.TILE_SIZE), 1)
+                    self.starting_position = (x * data.SETTINGS.TILE_SIZE, y * data.SETTINGS.TILE_SIZE)
                 if tile in [1, 2]:
-                    self.tile_rects.append(pygame.Rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE))
+                    self.tile_rects.append(pygame.Rect(x * data.SETTINGS.TILE_SIZE, y * data.SETTINGS.TILE_SIZE, data.SETTINGS.TILE_SIZE, data.SETTINGS.TILE_SIZE))
         
 
     def test_animation_list(self):

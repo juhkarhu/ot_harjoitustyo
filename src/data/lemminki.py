@@ -1,14 +1,15 @@
 import pygame, os
 from pygame.locals import *
-from data.SETTINGS import *
+import data.SETTINGS
+from data.world import Rock
 
 
-class Player(pygame.sprite.Sprite):
+class Lemminki(pygame.sprite.Sprite):
     def __init__(self, character_type, scale, starting_pos, id):
         super().__init__()
 
         self.id = id
-        
+        self.move_counter = 0
         self.control = False
         self.speed = 2
         self.moving_right = False
@@ -19,6 +20,8 @@ class Player(pygame.sprite.Sprite):
         self.direction = 1
         self.in_air = False
         self.flip = False
+        self.thrown_rocks = pygame.sprite.Group()
+
         self.load_images(character_type, scale, starting_pos)
         
   
@@ -53,12 +56,25 @@ class Player(pygame.sprite.Sprite):
     def give_control(self):
         self.control = False 
 
-    def update(self, display, tile_rects, left, right, jump):
+    def throw_rock(self):
+        rock = Rock(self.rect.centerx + (self.direction * self.rect.width), self.rect.centery, self.direction)
+        self.thrown_rocks.add(rock)
+        
+    def ai(self, display, tile_rects, left, right, jump, shoot):
+        self.move_counter += 1
+        self.update(display, tile_rects, left, right, jump, shoot)
+        if self.move_counter > 2 * data.SETTINGS.SCALA:
+            self.direction *= -1
+            self.move_counter = 0
+
+    def update(self, display, tile_rects, left, right, jump, shoot):
         if self.control:
             if left:
                 self.direction = -1
             if right:
                 self.direction = 1
+            if shoot and len(self.thrown_rocks) < 1000:
+                self.throw_rock()
             self.moving_left = left
             self.moving_right = right
 
@@ -68,29 +84,33 @@ class Player(pygame.sprite.Sprite):
             if jump:
                 self.update_action(3)
                 if self.air_timer < 6:
-                    self.player_y_momentum = GRAVITY
+                    self.player_y_momentum = data.SETTINGS.GRAVITY
             else: # Idling
                 self.update_action(2)
 
         self.update_player_position(display, tile_rects)
 
     def update_player_position(self, display, tile_rects):
+        # Movement is an array, where [0] is x-movement and [1] is y-movement.
         self.player_movement = [0, 0]
+        # The character is controlled by the player.
         if self.control:
             if self.moving_right:
                 self.player_movement[0] += self.speed
             if self.moving_left:
                 self.player_movement[0] -= self.speed
         
-        # If the character is not controlled by the player, they will walk in the starting location.
+        # If the character is not controlled by the player, 
+        # they will walk in the starting location and a little slower.
         if not self.control:
             if self.direction == 1:
                 self.player_movement[0] += self.speed - 1
             if self.direction == -1:
                 self.player_movement[0] -= self.speed - 1 
         
+        # 
         self.player_movement[1] += self.player_y_momentum
-        self.player_y_momentum += 0.2
+        self.player_y_momentum += 0.3
         if self.player_y_momentum > 3:
             self.player_y_momentum = 3
 
@@ -111,6 +131,9 @@ class Player(pygame.sprite.Sprite):
         if self.player_movement[0] < 0:
             self.flip = True
 
+        # Drawing methods for the player and thrown rocks
+        self.thrown_rocks.update()
+        self.thrown_rocks.draw(display)
         self.image = pygame.transform.flip(self.image, self.flip, False)
         self.image.set_colorkey((255,255,255))
         display.blit(self.image, (self.rect.x, self.rect.y))
@@ -152,7 +175,7 @@ class Player(pygame.sprite.Sprite):
 
     def update_animation(self):
         self.image = self.animation_list[self.action][self.frame_index]
-        if pygame.time.get_ticks() - self.update_time > ANIMATION_COOLDOWN:
+        if pygame.time.get_ticks() - self.update_time > data.SETTINGS.ANIMATION_COOLDOWN:
             self.frame_index += 1
             self.update_time = pygame.time.get_ticks()
         if self.frame_index >= len(self.animation_list[self.action]):

@@ -1,9 +1,8 @@
 import pygame, sys, os
 from pygame.locals import *
 from pygame.constants import MOUSEBUTTONDOWN
-from data.player import Player
-from data.enemy import Enemy
-from data.SETTINGS import *
+import data.lemminki
+import data.SETTINGS
 from data.world import *
 
 
@@ -22,6 +21,7 @@ class Game:
         self.left = False
         self.right = False
         self.jump = False
+        self.shoot = False
         self.interval = 1600
         self.ADD_LEMMING = pygame.USEREVENT + 1
         pygame.time.set_timer(self.ADD_LEMMING, self.interval)
@@ -40,6 +40,8 @@ class Game:
         self.npc_list = pygame.sprite.Group()
         self.player_sprites = pygame.sprite.Group()
         self.map_sprites = pygame.sprite.Group()
+        self.door_list = pygame.sprite.Group()
+        self.flying_projectiles = pygame.sprite.Group()
         self.num_of_players_spawned = 0
 
         self.load_tile_images()      
@@ -47,7 +49,7 @@ class Game:
         self.game_map = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 1],
             [1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 2, 2, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 2, 2, 0, 0, 0, 0, 0, 1],
@@ -56,7 +58,7 @@ class Game:
             [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 2, 3, 0, 0, 0, 0, 0, 3, 2, 0, 0, 0, 0, 0, 0, 0, 1],
-            [1, 0, 0, 0, 2, 2, 0, 0, 0, 2, 2, 1, 2, 2, 2, 2, 0, 0, 0, 1],
+            [1, 0, 0, 0, 2, 2, 2, 0, 0, 2, 2, 1, 2, 2, 2, 2, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 1],
@@ -68,19 +70,17 @@ class Game:
 
         self.clock = pygame.time.Clock()
         self.max_players = 2
-        self.controlled = False
 
         self.height = len(self.game_map)
         self.width = len(self.game_map[0])
-        self.screen_height = SCALA * self.height
-        self.screen_width = SCALA * self.width
-        self.WINDOW_SIZE = (self.screen_height, self.screen_width)
-        self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
+        data.SETTINGS.SCREEN_HEIGHT = data.SETTINGS.SCALA * self.height
+        data.SETTINGS.SCREEN_WIDTH = data.SETTINGS.SCALA * self.width
+        self.WINDOW_SIZE = (data.SETTINGS.SCREEN_HEIGHT, data.SETTINGS.SCREEN_WIDTH)
+        self.screen = pygame.display.set_mode((data.SETTINGS.SCREEN_WIDTH, data.SETTINGS.SCREEN_HEIGHT))
         pygame.display.set_caption('Lemminki')
         # self.display = pygame.Surface((300, self.screen_width))
     
     def check_events(self):
-        self.events = []
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
@@ -93,6 +93,8 @@ class Game:
                     self.left = True
                 if event.key == pygame.K_d:
                     self.right = True
+                if event.key == pygame.K_SPACE:
+                    self.shoot = True
                 if event.key == pygame.K_w and not self.jump:
                     self.jump = True
 
@@ -101,6 +103,8 @@ class Game:
                     self.left = False
                 if event.key == pygame.K_d:
                     self.right = False
+                if event.key == pygame.K_SPACE:
+                    self.shoot = False
                 if event.key == pygame.K_w:
                     self.jump = False
 
@@ -112,11 +116,9 @@ class Game:
             if event.type == self.ADD_LEMMING:
                 if self.num_of_players_spawned < self.max_players:
                     id = os.urandom(16).hex()
-                    new_player = Player('player', self.character_scale, (self.starting_position), id)
+                    new_player = data.lemminki.Lemminki('player', self.character_scale, (self.starting_position), id)
                     self.player_sprites.add(new_player)
                     self.num_of_players_spawned += 1
-            else:
-                self.events.append(event)
 
 
     '''Check whether the clicked character may be controlled or not.
@@ -168,40 +170,51 @@ class Game:
             pygame.display.flip()
 
 
-
+    '''
+    Reads the map array and assigns objects depending on the value on the array. 
+    1 and 2 are ground tiles.
+    3 is an enemy.
+    10 is the starting locations for the player. 
+    8 is the door that finishes the level.
+    '''
     def read_map_data(self):
         self.tile_rects = []     
         for y, row in enumerate(self.game_map):
             for x, tile in enumerate(row):
                 if tile == 10:
                     self.starting_pos = None
-                    print('starting_pos here!')
-                    self.starting_position = (x * TILE_SIZE, y * TILE_SIZE)
-                    print(self.starting_position)
+                    self.starting_position = (x * data.SETTINGS.TILE_SIZE, y * data.SETTINGS.TILE_SIZE)
                 if tile in [1, 2]:
-                    self.tile_rects.append(pygame.Rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE))
+                    self.tile_rects.append(pygame.Rect(x * data.SETTINGS.TILE_SIZE, y * data.SETTINGS.TILE_SIZE, data.SETTINGS.TILE_SIZE, data.SETTINGS.TILE_SIZE))
                 if tile == 1:
-                    self.tile_rects.append(pygame.Rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE))
-                    tile = Tile(x * TILE_SIZE, y * TILE_SIZE, self.dirt_image)
+                    self.tile_rects.append(pygame.Rect(x * data.SETTINGS.TILE_SIZE, y * data.SETTINGS.TILE_SIZE, data.SETTINGS.TILE_SIZE, data.SETTINGS.TILE_SIZE))
+                    tile = Tile(x * data.SETTINGS.TILE_SIZE, y * data.SETTINGS.TILE_SIZE, self.dirt_image)
                     self.map_sprites.add(tile)
                 if tile == 2:
-                    self.tile_rects.append(pygame.Rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE))
-                    tile = Tile(x * TILE_SIZE, y * TILE_SIZE, self.grass_image)
+                    self.tile_rects.append(pygame.Rect(x * data.SETTINGS.TILE_SIZE, y * data.SETTINGS.TILE_SIZE, data.SETTINGS.TILE_SIZE, data.SETTINGS.TILE_SIZE))
+                    tile = Tile(x * data.SETTINGS.TILE_SIZE, y * data.SETTINGS.TILE_SIZE, self.grass_image)
                     self.map_sprites.add(tile)
                 if tile == 3:
                     id = os.urandom(16).hex()
-                    new_npc = Enemy('enemy', self.character_scale, (x * TILE_SIZE, y * TILE_SIZE), id)
+                    new_npc = data.lemminki.Lemminki('enemy', self.character_scale, (x * data.SETTINGS.TILE_SIZE, y * data.SETTINGS.TILE_SIZE), id)
                     self.npc_list.add(new_npc)
                 if tile == 8:
-                    door = Door(x * TILE_SIZE, y * TILE_SIZE)
+                    door = Door(x * data.SETTINGS.TILE_SIZE, y * data.SETTINGS.TILE_SIZE)
                     self.map_sprites.add(door)
+                    self.door_list.add(door)
 
 
 
     def draw_screen(self):
         self.screen.fill((146,244,255))
         self.map_sprites.draw(self.screen)
+        self.flying_projectiles.draw(self.screen)
+        if self.control:
+            for door in self.door_list:
+                if self.player.rect.colliderect(door.rect):
+                    #TODO Onko kaikki paasseet loppuun.
+                    print('one point awarded')
         for player in self.player_sprites:
-            player.update(self.screen, self.tile_rects, self.left, self.right, self.jump)
+            player.update(self.screen, self.tile_rects, self.left, self.right, self.jump, self.shoot)
         for npc in self.npc_list:
-            npc.ai(self.screen, self.tile_rects, self.left, self.right, self.jump)
+            npc.ai(self.screen, self.tile_rects, self.left, self.right, self.jump, self.shoot)
