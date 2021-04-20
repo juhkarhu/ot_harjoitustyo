@@ -33,3 +33,9 @@ Testikattavuuden voi tarkistaa komennolla:
 ```
 poetry run invoke coverage-report
 ```
+
+#### Pylint
+Tiedoston [].pylintrc](./src/.pylintrc) määrittelemät tarkistukset suoritetaan komennolla:
+```
+poetry run invoke lint
+```

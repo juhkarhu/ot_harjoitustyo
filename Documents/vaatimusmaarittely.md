@@ -16,12 +16,12 @@ Sovellus käynnistyy aloitusruutuun, josta voi valita haluamansa vaikeustason (v
 - Käyttäjä voi valita vaikeustason
 - Käyttäjä voi valita pelinopeuden (turhake?)
 - Pelihahmo voi hyppiä ja ampua. tehty
-- Pelihahmon voi valita vapaasti kentällä olevista mahdollisista hahmoista (ei kuitenkaan vihollisia) tehty.
--  
+- Pelihahmon voi valita vapaasti kentällä olevista mahdollisista hahmoista (ei kuitenkaan vihollisia).tehty
 - Viholliset menettävät tajunnan mutta heräävät takaisin jonkin ajan kuluttua. 
 - Kentässä on tietty aikaraja. tehty
+- Aloitusruudun sivussa on highscore-lista. tehty
 
 
 ### Jatkokehitysideoita
 - Kenttäeditori
-- Aloitusruudun sivussa voisi olla highscore-lista. tehty
+
