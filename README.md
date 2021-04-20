@@ -1,4 +1,4 @@
-# Lemmings-inspired game, Lemmingki
+# Lemmingki
 
 ### Sovelluksen tarkoitus
 Peli on yksinkertainen tasohyppely, johon on otettu vaikutteita Lemmingsistä. Pelihahmot ilmestyvät kentälle aloituskohdasta ja kävelevät ympäriinsä kunnes pelaaja valitsee sen. Valinnan jälkeen pelaajan tehtävä on ohjata hahmo kentän loppuun.
@@ -35,7 +35,7 @@ poetry run invoke coverage-report
 ```
 
 #### Pylint
-Tiedoston [].pylintrc](./src/.pylintrc) määrittelemät tarkistukset suoritetaan komennolla:
+Tiedoston [.pylintrc](./src/.pylintrc) määrittelemät tarkistukset suoritetaan komennolla:
 ```
 poetry run invoke lint
 ```
