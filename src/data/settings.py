@@ -16,3 +16,7 @@ WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 GREY = (128, 128, 128)
 SKYBLUE = (146, 244, 255)
+
+
+# Characters
+CHARACTER_SCALE = 3
