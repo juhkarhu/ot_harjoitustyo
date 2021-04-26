@@ -8,7 +8,7 @@ import data.settings
 
 
 
-class Lemminki(pygame.sprite.Sprite):
+class Lemminki(pygame.sprite.Sprite): #pylint: disable=too-many-instance-attributes
     '''
     Initialization of the class.
     '''
@@ -33,6 +33,17 @@ class Lemminki(pygame.sprite.Sprite):
         self.cooldown_tracker = 0
         self.clock = pygame.time.Clock()
 
+        # These are defined as None for the sake of pylint
+        # They are used elsewhere.
+        self.action = None
+        self.frame_index = None
+        self.update_time = None
+        self.image = None
+        self.player_movement = None
+        self.collision_types = None
+        self.hit_list = None
+
+        # The normal init continues from here:
         self.load_images(character_type, scale, starting_pos)
 
     def load_images(self, character_type, scale, starting_pos):
@@ -85,8 +96,8 @@ class Lemminki(pygame.sprite.Sprite):
 
     def get_hit_enemy(self):
         '''
-        Handles the hit detection for enemy class. 
-        The enemy will go unconscious for a few seconds and then come back to being awake. 
+        Handles the hit detection for enemy class.
+        The enemy will go unconscious for a few seconds and then come back to being awake.
         '''
         if self.conscious:
             self.conscious = False
@@ -122,7 +133,7 @@ class Lemminki(pygame.sprite.Sprite):
                 self.direction *= -1
                 self.move_counter = 0
         self.update(display, tile_rects, left, right, jump, shoot)
-        
+
 
     def update(self, display, tile_rects, left, right, jump, shoot):
         '''
@@ -152,7 +163,7 @@ class Lemminki(pygame.sprite.Sprite):
 
         self.update_player_position(display, tile_rects)
 
-    def update_player_position(self, display, tile_rects):
+    def update_player_position(self, display, tile_rects): #pylint: disable=too-many-branches
         '''
         Updates the character position on the screen.
         '''

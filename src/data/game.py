@@ -1,5 +1,7 @@
-import sys, os
-import pygame, pygame.locals
+import sys
+import os
+import pygame
+import pygame.locals
 from pygame.constants import MOUSEBUTTONDOWN
 
 from data.assets import lemminki, world
@@ -19,14 +21,48 @@ class Game:
         self.intro_text_font = pygame.font.Font(None, 45)
         self.map = Map()
 
+        # Starts the intro loop
         self.clock = pygame.time.Clock()
         self.intro = True
         self.intro_loop()
 
+        # Pylint error handling
+        self.player = None
+        self.player_id = None
+        self.throw_cooldown = None
+        self.control = None
+        self.left = None
+        self.right = None
+        self.jump = None
+        self.shoot = None
+        self.interval = None
+        self.add_lemming = None
+        self.grass_image = None
+        self.dirt_image = None
+        self.max_players = None
+        self.points = None
+        self.counter = None
+        self.text = None
+        self.thrown_rocks = None
+        self.player_sprites = None
+        self.tile_rects = None
+        self.door_list = None
+        self.map_sprites = None
+        self.npc_list = None
+        self.window_size = None
+        self.height = None
+        self.width = None
+        self.screen = None
+        self.x = None
+        self.y = None
+        self.all_players_spawned = None
+        self.num_of_players_spawned = None
+        self.controlled_player_list = None
+
     def set_player_variables(self):
         self.player = None
         self.player_id = 0
-        
+
         self.throw_cooldown = 0
         self.control = False
         self.left = False
@@ -34,8 +70,8 @@ class Game:
         self.jump = False
         self.shoot = False
         self.interval = 1600
-        self.ADD_LEMMING = pygame.USEREVENT + 1
-        pygame.time.set_timer(self.ADD_LEMMING, self.interval)
+        self.add_lemming = pygame.USEREVENT + 1
+        pygame.time.set_timer(self.add_lemming, self.interval)
 
 
     def load_tile_images(self):
@@ -72,7 +108,7 @@ class Game:
         print(self.height, self.width)
         data.settings.SCREEN_HEIGHT = data.settings.SCALA * self.height
         data.settings.SCREEN_WIDTH = data.settings.SCALA * self.width
-        self.WINDOW_SIZE = (data.settings.SCREEN_HEIGHT,
+        self.window_size = (data.settings.SCREEN_HEIGHT,
                             data.settings.SCREEN_WIDTH)
         self.screen = pygame.display.set_mode(
             (data.settings.SCREEN_WIDTH, data.settings.SCREEN_HEIGHT))
@@ -87,7 +123,7 @@ class Game:
         # that's no good.
         data.settings.SCREEN_HEIGHT = data.settings.SCALA * 19
         data.settings.SCREEN_WIDTH = data.settings.SCALA * 20
-        self.WINDOW_SIZE = (data.settings.SCREEN_HEIGHT,
+        self.window_size = (data.settings.SCREEN_HEIGHT,
                             data.settings.SCREEN_WIDTH)
         self.screen = pygame.display.set_mode(
             (data.settings.SCREEN_WIDTH, data.settings.SCREEN_HEIGHT))
@@ -103,10 +139,10 @@ class Game:
         while self.intro:
             for tapahtuma in pygame.event.get():
                 if tapahtuma.type == pygame.QUIT:
-                    exit()
+                    sys.exit()
                 if tapahtuma.type == pygame.KEYDOWN:
                     if tapahtuma.key == pygame.K_ESCAPE:
-                        exit()
+                        sys.exit()
                     if tapahtuma.key == pygame.K_RETURN:
                         self.set_game_variables()
                         self.set_player_variables()
@@ -183,9 +219,7 @@ class Game:
                 sys.exit()
             if event.type == pygame.locals.KEYDOWN:
                 if event.key == pygame.locals.K_ESCAPE:
-                    # self.intro_loop()
-                    pygame.quit()
-                    sys.exit()
+                    self.intro_loop()
                 if self.control:
                     if event.key == pygame.K_a:
                         self.left = True
@@ -225,7 +259,7 @@ class Game:
                     if unit.rect.collidepoint(self.x, self.y):
                         self.check_control_conditions(unit)
 
-            if event.type == self.ADD_LEMMING:
+            if event.type == self.add_lemming:
                 if self.num_of_players_spawned == self.max_players:
                     self.all_players_spawned = True
                 if self.num_of_players_spawned < self.max_players:

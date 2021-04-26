@@ -1,14 +1,14 @@
 import os
 import pygame
-import data.settings
-from data.assets import lemminki, world
+import data.settings #pylint: disable=import-error
+from data.assets import lemminki, world #pylint: disable=import-error
 
 class Map:
     def __init__(self):
 
         self.load_dirt_image()
         self.load_grass_image()
-        
+
         self.npc_list = pygame.sprite.Group()
         self.map_sprites = pygame.sprite.Group()
         self.door_list = pygame.sprite.Group()
@@ -32,9 +32,15 @@ class Map:
             [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 1],
             [1, 0, 10, 0, 0, 0, 0, 0, 0, 0, 2, 0, 2, 0, 2, 2, 2, 2, 2, 1],
             [1, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1],
-            [1, 0, 0, 0, 8, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 0, 0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
         ]
+
+        #Pylint error handling
+        self.tile_rects = None
+        self.starting_position = None
+
+
 
     def get_npc_list(self):
         return self.npc_list
@@ -66,7 +72,7 @@ class Map:
 
     def read_map_data(self):
         '''
-        Reads the map array and assigns objects depending on the value on the array. 
+        Reads the map array and assigns objects depending on the value on the array.
         1 and 2 are ground tiles,
         3 is an enemy,
         10 is the starting locations for the player,
@@ -77,7 +83,7 @@ class Map:
         for row_num, row in enumerate(self.game_map):
             for col_num, tile in enumerate(row):
                 if tile == 10:
- 
+
                     self.starting_position = (
                         col_num * data.settings.TILE_SIZE, row_num * data.settings.TILE_SIZE)
                 if tile in [1, 2]:
