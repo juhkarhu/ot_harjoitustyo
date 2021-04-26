@@ -1,5 +1,4 @@
 import unittest
-import pygame
 import data.points
 
 

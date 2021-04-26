@@ -1,11 +1,10 @@
-import sys
-import os
-import pygame
-import pygame.locals
+import sys, os
+import pygame, pygame.locals
 from pygame.constants import MOUSEBUTTONDOWN
-import data.lemminki
+
+from data.assets import lemminki, world
+
 import data.settings
-import data.world
 import data.points
 
 
@@ -104,7 +103,7 @@ class Game:
                     self.tile_rects.append(pygame.Rect(
                         col_num * data.settings.TILE_SIZE, row_num * data.settings.TILE_SIZE,
                         data.settings.TILE_SIZE, data.settings.TILE_SIZE))
-                    tile = data.world.Tile(
+                    tile = world.Tile(
                         col_num * data.settings.TILE_SIZE, row_num * data.settings.TILE_SIZE,
                         self.dirt_image)
                     self.map_sprites.add(tile)
@@ -112,17 +111,17 @@ class Game:
                     self.tile_rects.append(pygame.Rect(
                         col_num * data.settings.TILE_SIZE, row_num * data.settings.TILE_SIZE,
                         data.settings.TILE_SIZE, data.settings.TILE_SIZE))
-                    tile = data.world.Tile(
+                    tile = world.Tile(
                         col_num * data.settings.TILE_SIZE, row_num * data.settings.TILE_SIZE,
                         self.grass_image)
                     self.map_sprites.add(tile)
                 if tile == 3:
-                    identifier = os.urandom(16).hex()
-                    new_npc = data.lemminki.Lemminki('enemy', self.character_scale, (
-                        col_num * data.settings.TILE_SIZE, row_num * data.settings.TILE_SIZE), identifier)
+                    id_num = os.urandom(16).hex()
+                    new_npc = lemminki.Lemminki('enemy', self.character_scale, (
+                        col_num * data.settings.TILE_SIZE, row_num * data.settings.TILE_SIZE), id_num)
                     self.npc_list.add(new_npc)
                 if tile == 8:
-                    door = data.world.Door(
+                    door = world.Door(
                         col_num * data.settings.TILE_SIZE, row_num * data.settings.TILE_SIZE)
                     self.map_sprites.add(door)
                     self.door_list.add(door)
@@ -159,7 +158,7 @@ class Game:
 
     def intro_loop(self):
         '''
-        Intro - the main menu at the moment - is processed here. 
+        Intro - the main menu at the moment - is processed here.
         High score displays in the menu.
         '''
         self.set_introdisplay_settings()
@@ -263,7 +262,7 @@ class Game:
                     if event.key == pygame.K_SPACE:
                         if self.throw_cooldown == 0:
                             self.throw_cooldown = 25
-                            rock = data.world.Rock(self.player.rect.centerx + (
+                            rock = world.Rock(self.player.rect.centerx + (
                                 self.player.direction * self.player.rect.width),
                                 self.player.rect.centery, self.player.direction)
                             self.thrown_rocks.add(rock)
@@ -298,7 +297,7 @@ class Game:
                     self.all_players_spawned = True
                 if self.num_of_players_spawned < self.max_players:
                     identifier = os.urandom(16).hex()
-                    new_player = data.lemminki.Lemminki(
+                    new_player = lemminki.Lemminki(
                         'player', self.character_scale, (self.starting_position), identifier)
                     self.player_sprites.add(new_player)
                     self.num_of_players_spawned += 1
@@ -353,6 +352,7 @@ class Game:
             for npc in self.npc_list:
                 if rock.rect.colliderect(npc.rect):
                     rock.kill()
+                    npc.get_hit_enemy()
                     self.points += 100
                     print(
                         'point for hitting enemy. Enemy goes to sleep for X \

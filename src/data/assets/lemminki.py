@@ -5,14 +5,13 @@ Handles the character logic for player and enemy characters.
 import os
 import pygame
 import data.settings
-import data.world
+
 
 
 class Lemminki(pygame.sprite.Sprite):
     '''
     Initialization of the class.
     '''
-
     def __init__(self, character_type, scale, starting_pos, id_number):
         super().__init__()
 
@@ -30,16 +29,17 @@ class Lemminki(pygame.sprite.Sprite):
         self.in_air = False
         self.flip = False
         self.thrown_rocks = pygame.sprite.Group()
+        self.conscious = True
+        self.cooldown_tracker = 0
+        self.clock = pygame.time.Clock()
 
         self.load_images(character_type, scale, starting_pos)
 
     def load_images(self, character_type, scale, starting_pos):
         '''
         Loads all the images used for the character sprites.
-
         All the animations have the same image as placeholder. Easy enough to edit if time allows.
         '''
-
         self.action = 0
         self.frame_index = 0
         self.update_time = pygame.time.get_ticks()
@@ -51,9 +51,7 @@ class Lemminki(pygame.sprite.Sprite):
             num_of_frames = len([f for f in os.listdir(
                 path)if os.path.isfile(os.path.join(path, f))])
             for i in range(num_of_frames):
-                img = pygame.image.load(
-                    f'img/{character_type}/{animation}/{i}.png').convert_alpha()
-
+                img = pygame.image.load(f'img/{character_type}/{animation}/{i}.png').convert_alpha()
                 img = pygame.transform.scale(
                     img, (int(img.get_width() * scale), int(img.get_height() * scale)))
                 # img.set_colorkey((255,255,255))
@@ -84,8 +82,17 @@ class Lemminki(pygame.sprite.Sprite):
         '''
         self.control = False
 
-    def get_hit(self):
-        pass
+
+    def get_hit_enemy(self):
+        '''
+        Handles the hit detection for enemy class. 
+        The enemy will go unconscious for a few seconds and then come back to being awake. 
+        '''
+        if self.conscious:
+            self.conscious = False
+            self.update_action(1)
+            self.update_animation()
+
 
     def throw_rock(self):
         if self.throw_cooldown == 0:
@@ -100,11 +107,22 @@ class Lemminki(pygame.sprite.Sprite):
         AI controls the NPC characters and makes them walk for the
         length of two tiles with the help of update().
         '''
-        self.move_counter += 1
+        if not self.conscious:
+            self.update_action(1)
+            self.update_animation()
+            self.cooldown_tracker += 1
+        if self.cooldown_tracker > 300:
+            self.conscious = True
+            self.cooldown_tracker = 0
+            self.update_action(4)
+            self.update_animation()
+        if self.conscious:
+            self.move_counter += 1
+            if self.move_counter > 2 * data.settings.SCALA:
+                self.direction *= -1
+                self.move_counter = 0
         self.update(display, tile_rects, left, right, jump, shoot)
-        if self.move_counter > 2 * data.settings.SCALA:
-            self.direction *= -1
-            self.move_counter = 0
+        
 
     def update(self, display, tile_rects, left, right, jump, shoot):
         '''
@@ -135,55 +153,60 @@ class Lemminki(pygame.sprite.Sprite):
         self.update_player_position(display, tile_rects)
 
     def update_player_position(self, display, tile_rects):
-        # Movement is an array, where [0] is x-movement and [1] is y-movement.
-        self.player_movement = [0, 0]
-        # The character is controlled by the player.
-        if self.control:
-            if self.moving_right:
-                self.player_movement[0] += self.speed
-            if self.moving_left:
-                self.player_movement[0] -= self.speed
+        '''
+        Updates the character position on the screen.
+        '''
+        if self.conscious:
+            # Movement is an array, where [0] is x-movement and [1] is y-movement.
+            self.player_movement = [0, 0]
+            # The character is controlled by the player.
+            if self.control:
+                if self.moving_right:
+                    self.player_movement[0] += self.speed
+                if self.moving_left:
+                    self.player_movement[0] -= self.speed
 
-        # If the character is not controlled by the player,
-        # they will walk in the starting location and a little slower.
-        else:
-            if self.direction == 1:
-                self.player_movement[0] += self.speed - 1
-            if self.direction == -1:
-                self.player_movement[0] -= self.speed - 1
+            # If the character is not controlled by the player,
+            # they will walk in the starting location and a little slower.
+            else:
+                if self.direction == 1:
+                    self.player_movement[0] += self.speed - 1
+                if self.direction == -1:
+                    self.player_movement[0] -= self.speed - 1
 
-        self.player_movement[1] += self.player_y_momentum
-        self.player_y_momentum += 0.3
-        if self.player_y_momentum > 3:
-            self.player_y_momentum = 3
+            self.player_movement[1] += self.player_y_momentum
+            self.player_y_momentum += 0.3
+            if self.player_y_momentum > 3:
+                self.player_y_momentum = 3
 
-        collisions = self.move(self.player_movement, tile_rects)
+            collisions = self.move(self.player_movement, tile_rects)
 
-        if collisions['right'] or collisions['left'] and not self.control:
-            self.direction *= -1
-        if collisions['bottom']:
-            self.player_y_momentum = 0
-            self.air_timer = 0
-        if collisions['top']:
-            self.player_y_momentum += 1
-        else:
-            self.air_timer += 1
+            if collisions['right'] or collisions['left'] and not self.control:
+                self.direction *= -1
+            if collisions['bottom']:
+                self.player_y_momentum = 0
+                self.air_timer = 0
+            if collisions['top']:
+                self.player_y_momentum += 1
+            else:
+                self.air_timer += 1
 
-        self.update_animation()
-        if self.player_movement[0] > 0:
-            self.flip = False
-        if self.player_movement[0] < 0:
-            self.flip = True
+            self.update_animation()
+            if self.player_movement[0] > 0:
+                self.flip = False
+            if self.player_movement[0] < 0:
+                self.flip = True
 
-        # Drawing methods for the player and thrown rocks
-        # self.thrown_rocks.update()
-        # self.thrown_rocks.draw(display)
+            # Drawing methods for the player and thrown rocks
+            # self.thrown_rocks.update()
+            # self.thrown_rocks.draw(display)
         self.image = pygame.transform.flip(self.image, self.flip, False)
         self.image.set_colorkey((255, 255, 255))
         display.blit(self.image, (self.rect.x, self.rect.y))
 
     def move(self, movement, tiles):
-        '''Testing if the player can move to the desired location.
+        '''
+        Testing if the player can move to the desired location.
         First checking which tiles the player hits if moved in the x-plane,
         memorizing the tiles that were hit, and checking based on movement
         whether those were in the way. After that, the same for the
@@ -212,7 +235,9 @@ class Lemminki(pygame.sprite.Sprite):
         return self.collision_types
 
     def collision_test(self, rect, tiles):
-        ''' Returns all the tiles that player is hitting.'''
+        '''
+        Returns all the tiles that player is hitting.
+        '''
         self.hit_list = []
         for tile in tiles:
             if rect.colliderect(tile):
@@ -220,6 +245,9 @@ class Lemminki(pygame.sprite.Sprite):
         return self.hit_list
 
     def update_animation(self):
+        '''
+        Loops through the animations depending what the character is doing.
+        '''
         self.image = self.animation_list[self.action][self.frame_index]
         if pygame.time.get_ticks() - self.update_time > data.settings.ANIMATION_COOLDOWN:
             self.frame_index += 1
@@ -229,6 +257,9 @@ class Lemminki(pygame.sprite.Sprite):
         # self.mask = pygame.mask.from_surface(self.image)
 
     def update_action(self, new_action):
+        '''
+        Updates the action the character is doing at any given moment.
+        '''
         if new_action != self.action:
             self.action = new_action
             self.frame_index = 0
