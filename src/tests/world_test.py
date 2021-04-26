@@ -1,13 +1,13 @@
 import unittest
 import pygame
-import data.world
+from data.assets import world
 
 
 class TestWorldClass(unittest.TestCase):
     def setUp(self):
-        self.door = data.world.Door(10,20)
-        self.grass_tile = data.world.Tile(10, 70, pygame.image.load('img/ground_tiles/top_ground.png'))
-        self.rock = data.world.Rock(10,0,1)
+        self.door = world.Door(10,20)
+        self.grass_tile = world.Tile(10, 70, pygame.image.load('img/ground_tiles/top_ground.png'))
+        self.rock = world.Rock(10,0,1)
 
     def test_door_is_where_it_spawned(self):
         self.assertEqual(self.door.rect.x, 10)

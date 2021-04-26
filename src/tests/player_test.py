@@ -1,7 +1,7 @@
 import unittest
 import pygame
-import data.lemminki
-from data.world import *
+from data.assets import lemminki
+from data.assets.world import *
 import data.settings
 
 
@@ -24,7 +24,7 @@ class TestPlayerClass(unittest.TestCase):
         for y, row in enumerate(self.test_map):
             for x, tile in enumerate(row):
                 if tile == 10:
-                    self.new_player = data.lemminki.Lemminki(
+                    self.new_player = lemminki.Lemminki(
                         'player', 2, (x * data.settings.TILE_SIZE, y * data.settings.TILE_SIZE), 1)
                     self.starting_position = (
                         x * data.settings.TILE_SIZE, y * data.settings.TILE_SIZE)
