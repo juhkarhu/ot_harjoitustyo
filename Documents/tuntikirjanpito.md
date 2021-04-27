@@ -11,6 +11,6 @@
 |13.4. 	|   4   | luokkien yhdistämistä, pelaajan toiminnallisuuksien lisäystä
 |20.4.	|   5   | pylint, aloitusruutu, pisteiden- ja ajanlasku, pistelista
 |26.4.  |   4   | linttausta, viholliseen osuminen jäädyttää sen hetkeksi
-|27.4.  |   2   | linttausta, testien lisäämistä, paketteihin jakamista ja pelilogiikan eriyttämistä
+|27.4.  |   4   | linttausta, testien lisäämistä, paketteihin jakamista ja pelilogiikan eriyttämistä
 
-Yhteensä: 30 (26.4. 14:44 mennessä)
+Yhteensä: 34
