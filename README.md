@@ -7,7 +7,7 @@ Pisteitä saa nopeudesta, kaikkien hahmojen tuomisesta kentän loppuun ja viholl
 ### Dokumentaatio
 - [Tuntikirjanpito](./Documents/tuntukirjanpito.md)
 - [Vaatimusmäärittely](./Documents/vaatimusmaarittely.md)
-< [Arkkitehtuuri](./Documents/arkkitehtuuri.md)
+- [Arkkitehtuuri](./Documents/arkkitehtuuri.md)
 
 ### Komentorivitoiminnot
 #### Ohjelman suorittaminen
