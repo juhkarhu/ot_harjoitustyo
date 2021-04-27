@@ -10,14 +10,12 @@ class Door(pygame.sprite.Sprite):
     def __init__(self, x_coordinate, y_coordinate):
         super().__init__()
         # Door is represented as a robot for the time being.
-        img = pygame.image.load('./img/robo.png')
+        img = pygame.image.load('./img/ovi.png')
         self.image = pygame.transform.scale(
             img, (data.settings.TILE_SIZE, data.settings.TILE_SIZE))
         self.rect = self.image.get_rect()
         self.rect.x = x_coordinate
         self.rect.y = y_coordinate
-
-
 
 
 class Tile(pygame.sprite.Sprite):
