@@ -10,7 +10,7 @@ Pisteitä saa nopeudesta, kaikkien hahmojen tuomisesta kentän loppuun ja viholl
 - [Arkkitehtuuri](./Documents/arkkitehtuuri.md)
 
 ### Release
-[Release Viikko 5](https://github.com/juhkarhu/ot_harjoitustyo/releases/tag/viikko5)
+- [Release Viikko 5](https://github.com/juhkarhu/ot_harjoitustyo/releases/tag/viikko5)
 
 ### Komentorivitoiminnot
 #### Ohjelman suorittaminen
