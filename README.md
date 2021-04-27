@@ -9,6 +9,9 @@ Pisteitä saa nopeudesta, kaikkien hahmojen tuomisesta kentän loppuun ja viholl
 - [Vaatimusmäärittely](./Documents/vaatimusmaarittely.md)
 - [Arkkitehtuuri](./Documents/arkkitehtuuri.md)
 
+### Release
+[Release Viikko 5](https://github.com/juhkarhu/ot_harjoitustyo/releases/tag/viikko5)
+
 ### Komentorivitoiminnot
 #### Ohjelman suorittaminen
 Ohjelma ainut vaatimus pygame-kirjasto.
