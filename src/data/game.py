@@ -8,7 +8,7 @@ from data.assets import lemminki, world
 
 import data.settings
 import data.points
-from data.map import Map
+from data.assets.map import Map
 
 
 class Game:
@@ -26,7 +26,9 @@ class Game:
         self.intro = True
         self.intro_loop()
 
-        # Pylint error handling
+        # These are only for Pylint error handling
+        # Without these pylint gets error:
+        # W0201: Attribute 'player' defined outside __init__ (attribute-defined-outside-init)
         self.player = None
         self.player_id = None
         self.throw_cooldown = None
@@ -59,10 +61,10 @@ class Game:
         self.num_of_players_spawned = None
         self.controlled_player_list = None
 
+
     def set_player_variables(self):
         self.player = None
         self.player_id = 0
-
         self.throw_cooldown = 0
         self.control = False
         self.left = False
@@ -85,7 +87,7 @@ class Game:
         self.counter, self.text = 80, '80'.rjust(3)
         pygame.time.set_timer(pygame.USEREVENT, 1000)
 
-        # Variables for sprite lists and seeing if all players have spawned
+        # Variables for sprite lists and all players spawn check
         self.all_players_spawned = False
         self.thrown_rocks = pygame.sprite.Group()
         self.player_sprites = pygame.sprite.Group()
@@ -103,9 +105,8 @@ class Game:
         '''
         Sets the display settings for game.
         '''
-        self.height = len(self.map.get_game_map())
-        self.width = len(self.map.get_game_map())
-        print(self.height, self.width)
+        self.height = self.map.get_game_map_height()
+        self.width = self.map.get_game_map_width()
         data.settings.SCREEN_HEIGHT = data.settings.SCALA * self.height
         data.settings.SCREEN_WIDTH = data.settings.SCALA * self.width
         self.window_size = (data.settings.SCREEN_HEIGHT,
@@ -114,13 +115,14 @@ class Game:
             (data.settings.SCREEN_WIDTH, data.settings.SCREEN_HEIGHT))
         pygame.display.set_caption('Lemminki')
 
+
     def set_introdisplay_settings(self):
         '''
         Sets the display settings for menu.
         '''
         # Screen size is the same as the game map.
-        # This would be different but then the winwos position shifts when game is started and
-        # that's no good.
+        # This could be smaller but then the windows position shifts
+        # when game is started and that looks and feels bad.
         data.settings.SCREEN_HEIGHT = data.settings.SCALA * 19
         data.settings.SCREEN_WIDTH = data.settings.SCALA * 20
         self.window_size = (data.settings.SCREEN_HEIGHT,
@@ -136,11 +138,20 @@ class Game:
         '''
         self.set_introdisplay_settings()
         points_list = data.points.read_points()
+        self.name = ''
+        self.typed_username = False
+        font = pygame.font.Font(None, 50)
         while self.intro:
+            self.screen.fill(data.settings.SKYBLUE)
             for tapahtuma in pygame.event.get():
                 if tapahtuma.type == pygame.QUIT:
                     sys.exit()
                 if tapahtuma.type == pygame.KEYDOWN:
+                    if tapahtuma.unicode.isalpha():
+                        self.typed_username = True
+                        self.name += tapahtuma.unicode
+                    if tapahtuma.key == pygame.K_BACKSPACE:
+                        self.name = self.name [:-1]
                     if tapahtuma.key == pygame.K_ESCAPE:
                         sys.exit()
                     if tapahtuma.key == pygame.K_RETURN:
@@ -149,7 +160,10 @@ class Game:
                         self.set_gamedisplay_settings()
                         self.game_loop()
 
-            self.screen.fill(data.settings.SKYBLUE)
+            username_text = self.intro_text_font.render(
+                'Username: ', True, data.settings.RED)
+            username_input_text = self.intro_text_font.render(
+                self.name, True, data.settings.RED)
 
             game_name = self.title_font.render(
                 'Lemminki', True, data.settings.RED)
@@ -164,6 +178,12 @@ class Game:
             tutorial4_text = self.intro_text_font.render(
                 'Guide as many as you can to the finish!', True, data.settings.RED)
 
+            username_text_rect = username_text.get_rect(
+                center=(data.settings.SCREEN_WIDTH/2, data.settings.SCREEN_HEIGHT/2+190))
+
+            username_input_text_rect = username_input_text.get_rect(
+                center=(data.settings.SCREEN_WIDTH/2, data.settings.SCREEN_HEIGHT/2+215))
+
             game_name_text_rect = game_name.get_rect(
                 center=(data.settings.SCREEN_WIDTH/2, data.settings.SCREEN_HEIGHT/2-80))
             help_text_rect = help_text.get_rect(
@@ -177,28 +197,39 @@ class Game:
             tutorial4_text_rect = tutorial4_text.get_rect(
                 center=(data.settings.SCREEN_WIDTH/2, data.settings.SCREEN_HEIGHT/2+140))
 
-            if (len(points_list)) >= 3:
+            if len(points_list) >= 3:
                 top_score_text = self.intro_text_font.render(
                     'Top 3 High Scores', True, data.settings.RED)
                 top_scorers = []
-                offset = 250
+                offset = 280
                 for i in range(3):
                     username = points_list[i][0]
-                    points = points_list[i][1]
+                    print(type(username))
+                    points = str(points_list[i][1])
+                    print(type(points))
                     top_text = self.intro_text_font.render(
                         f'{username, points}', True, data.settings.RED)
+
                     top_text_rect = top_text.get_rect(
                         center=(data.settings.SCREEN_WIDTH/2, data.settings.SCREEN_HEIGHT/2+offset))
                     top_scorers.append((top_text, top_text_rect))
                     offset += 30
 
                 top_score_text_rect = top_score_text.get_rect(
-                    center=(data.settings.SCREEN_WIDTH/2, data.settings.SCREEN_HEIGHT/2+220))
+                    center=(data.settings.SCREEN_WIDTH/2, data.settings.SCREEN_HEIGHT/2+250))
                 for text, rect in top_scorers:
                     self.screen.blit(text, rect)
-
                 self.screen.blit(top_score_text, top_score_text_rect)
+            else:
+                high_score_missing_text = self.intro_text_font.render(
+                    'High scores will show once you have cleared the level 3 times!', 
+                    True, data.settings.RED)
+                high_score_missing_text_rect = high_score_missing_text.get_rect(
+                    center=(data.settings.SCREEN_WIDTH/2, data.settings.SCREEN_HEIGHT/2+250))
+                self.screen.blit(high_score_missing_text, high_score_missing_text_rect)
 
+            self.screen.blit(username_text, username_text_rect)
+            self.screen.blit(username_input_text, username_input_text_rect)
             self.screen.blit(game_name, game_name_text_rect)
             self.screen.blit(help_text, help_text_rect)
             self.screen.blit(tutorial_text, tutorial_text_rect)
@@ -265,7 +296,8 @@ class Game:
                 if self.num_of_players_spawned < self.max_players:
                     identifier = os.urandom(16).hex()
                     new_player = lemminki.Lemminki(
-                        'player', data.settings.CHARACTER_SCALE , (self.map.get_starting_position()), identifier)
+                        'player', data.settings.CHARACTER_SCALE , (self.map.get_starting_position()), 
+                        identifier)
                     self.player_sprites.add(new_player)
                     self.num_of_players_spawned += 1
 
@@ -295,7 +327,6 @@ class Game:
             self.clock.tick(60)
             self.draw_screen()
             self.check_events()
-            pygame.display.flip()
 
 
     def draw_screen(self):
@@ -306,15 +337,14 @@ class Game:
         if self.control:
             for door in self.door_list:
                 if self.player.rect.colliderect(door.rect):
-                    self.points += 100
+                    self.points += 1000
                     self.player.kill()
                     self.check_control_conditions(self.player)
                     if self.all_players_spawned and len(self.player_sprites) == 0:
-                        # TODO Ask for the username
                         self.clock.tick(0)
                         self.points += (self.counter * 100)
-                        data.points.write_points('testaaja', self.points)
-                        print('LÄPI')
+                        if self.typed_username:
+                            data.points.write_points(self.name, self.points)
                         self.intro_loop()
 
         for rock in self.thrown_rocks:
@@ -340,5 +370,5 @@ class Game:
             f'Time: {self.text}', True, data.settings.BLACK)
         self.screen.blit(score, (60, 50))
         self.screen.blit(time, (790, 50))
-
+        pygame.display.flip()
     

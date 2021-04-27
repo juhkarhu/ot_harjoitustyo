@@ -1,8 +1,1 @@
-testaaja,77000
-testaaja,7300
-testaaja,7300
-testaaja,7300
-testi,10
-testi,10
-testi,10
-testi,10
+Juhna,422

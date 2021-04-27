@@ -54,6 +54,12 @@ class Map:
     def get_game_map(self):
         return self.game_map
 
+    def get_game_map_height(self):
+        return len(self.game_map)
+
+    def get_game_map_width(self):
+        return len(self.game_map[0])
+
     def get_starting_position(self):
         return self.starting_position
 
@@ -83,7 +89,6 @@ class Map:
         for row_num, row in enumerate(self.game_map):
             for col_num, tile in enumerate(row):
                 if tile == 10:
-
                     self.starting_position = (
                         col_num * data.settings.TILE_SIZE, row_num * data.settings.TILE_SIZE)
                 if tile in [1, 2]:
@@ -109,7 +114,8 @@ class Map:
                 if tile == 3:
                     id_num = os.urandom(16).hex()
                     new_npc = lemminki.Lemminki('enemy', data.settings.CHARACTER_SCALE, (
-                        col_num * data.settings.TILE_SIZE, row_num * data.settings.TILE_SIZE), id_num)
+                        col_num * data.settings.TILE_SIZE, row_num * data.settings.TILE_SIZE),
+                        id_num)
                     self.npc_list.add(new_npc)
                 if tile == 8:
                     door = world.Door(
