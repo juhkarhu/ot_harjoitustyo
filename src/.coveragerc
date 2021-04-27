@@ -1,2 +1,3 @@
 [run]
 source = data
+omit = data/game.py

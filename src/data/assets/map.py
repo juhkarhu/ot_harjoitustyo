@@ -1,7 +1,7 @@
 import os
 import pygame
-import data.settings #pylint: disable=import-error
-from data.assets import lemminki, world #pylint: disable=import-error
+import data.settings 
+from data.assets import lemminki, world 
 
 class Map:
     def __init__(self):

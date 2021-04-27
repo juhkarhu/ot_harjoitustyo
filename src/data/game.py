@@ -204,9 +204,7 @@ class Game:
                 offset = 280
                 for i in range(3):
                     username = points_list[i][0]
-                    print(type(username))
                     points = str(points_list[i][1])
-                    print(type(points))
                     top_text = self.intro_text_font.render(
                         f'{username, points}', True, data.settings.RED)
 
@@ -348,14 +346,14 @@ class Game:
                         self.intro_loop()
 
         for rock in self.thrown_rocks:
+            for tile in self.tile_rects:
+                if rock.rect.colliderect(tile):
+                    rock.kill()
             for npc in self.npc_list:
                 if rock.rect.colliderect(npc.rect):
                     rock.kill()
                     npc.get_hit_enemy()
                     self.points += 100
-                    print(
-                        'point for hitting enemy. Enemy goes to sleep for X \
-                        amount of time before he wakes back up.')
 
         for player in self.player_sprites:
             player.update(self.screen, self.tile_rects, self.left,

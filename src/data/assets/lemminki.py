@@ -9,6 +9,7 @@ import data.settings
 
 
 class Lemminki(pygame.sprite.Sprite): #pylint: disable=too-many-instance-attributes
+    # Disabled error message from standard pygame class
     '''
     Initialization of the class.
     '''
@@ -105,14 +106,6 @@ class Lemminki(pygame.sprite.Sprite): #pylint: disable=too-many-instance-attribu
             self.update_animation()
 
 
-    def throw_rock(self):
-        if self.throw_cooldown == 0:
-            self.throw_cooldown = 30
-            rock = data.world.Rock(
-                self.rect.centerx + (self.direction * self.rect.width),
-                self.rect.centery, self.direction)
-            self.thrown_rocks.add(rock)
-
     def ai_movement(self, display, tile_rects, left, right, jump, shoot):
         '''
         AI controls the NPC characters and makes them walk for the
@@ -163,50 +156,53 @@ class Lemminki(pygame.sprite.Sprite): #pylint: disable=too-many-instance-attribu
 
         self.update_player_position(display, tile_rects)
 
+    def update_conscious_position(self, tile_rects):
+        self.player_movement = [0, 0]
+        # The character is controlled by the player.
+        if self.control:
+            if self.moving_right:
+                self.player_movement[0] += self.speed
+            if self.moving_left:
+                self.player_movement[0] -= self.speed
+
+        # If the character is not controlled by the player,
+        # they will walk in the starting location and a little slower.
+        else:
+            if self.direction == 1:
+                self.player_movement[0] += self.speed - 1
+            if self.direction == -1:
+                self.player_movement[0] -= self.speed - 1
+
+        self.player_movement[1] += self.player_y_momentum
+        self.player_y_momentum += 0.3
+        if self.player_y_momentum > 3:
+            self.player_y_momentum = 3
+
+        collisions = self.move(self.player_movement, tile_rects)
+
+        if collisions['right'] or collisions['left'] and not self.control:
+            self.direction *= -1
+        if collisions['bottom']:
+            self.player_y_momentum = 0
+            self.air_timer = 0
+        if collisions['top']:
+            self.player_y_momentum += 1
+        else:
+            self.air_timer += 1
+
+        self.update_animation()
+        if self.player_movement[0] > 0:
+            self.flip = False
+        if self.player_movement[0] < 0:
+            self.flip = True
+
     def update_player_position(self, display, tile_rects): #pylint: disable=too-many-branches
         '''
         Updates the character position on the screen.
         '''
+        # Only conscious characters can move. 
         if self.conscious:
-            # Movement is an array, where [0] is x-movement and [1] is y-movement.
-            self.player_movement = [0, 0]
-            # The character is controlled by the player.
-            if self.control:
-                if self.moving_right:
-                    self.player_movement[0] += self.speed
-                if self.moving_left:
-                    self.player_movement[0] -= self.speed
-
-            # If the character is not controlled by the player,
-            # they will walk in the starting location and a little slower.
-            else:
-                if self.direction == 1:
-                    self.player_movement[0] += self.speed - 1
-                if self.direction == -1:
-                    self.player_movement[0] -= self.speed - 1
-
-            self.player_movement[1] += self.player_y_momentum
-            self.player_y_momentum += 0.3
-            if self.player_y_momentum > 3:
-                self.player_y_momentum = 3
-
-            collisions = self.move(self.player_movement, tile_rects)
-
-            if collisions['right'] or collisions['left'] and not self.control:
-                self.direction *= -1
-            if collisions['bottom']:
-                self.player_y_momentum = 0
-                self.air_timer = 0
-            if collisions['top']:
-                self.player_y_momentum += 1
-            else:
-                self.air_timer += 1
-
-            self.update_animation()
-            if self.player_movement[0] > 0:
-                self.flip = False
-            if self.player_movement[0] < 0:
-                self.flip = True
+            self.update_conscious_position(tile_rects)
 
             # Drawing methods for the player and thrown rocks
             # self.thrown_rocks.update()

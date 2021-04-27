@@ -10,7 +10,7 @@
 |12.4.	|   3	| refaktorointi viimeistelty, muutettu hahmon ja maan välistä tunnistamista ja hahmon liikkumista 
 |13.4. 	|  4	| luokkien yhdistämistä, pelaajan toiminnallisuuksien lisäystä
 |20.4.	|  5	| pylint, aloitusruutu, pisteiden- ja ajanlasku, pistelista
-|26.4.  |   3   | linttausta, viholliseen osuminen jäädyttää sen hetkeksi
+|26.4.  |   4   | linttausta, viholliseen osuminen jäädyttää sen hetkeksi
 
 
-Yhteensä: 29 (26.4. 14:44 mennessä)
+Yhteensä: 30 (26.4. 14:44 mennessä)
