@@ -5,7 +5,7 @@ Peli on yksinkertainen tasohyppely, johon on otettu vaikutteita Lemmingsistä. P
 Pisteitä saa nopeudesta, kaikkien hahmojen tuomisesta kentän loppuun ja vihollisten tuhoamisesta. 
 
 ### Dokumentaatio
-- [Tuntikirjanpito](./Documents/tuntukirjanpito.md)
+- [Tuntikirjanpito](./Documents/tuntikirjanpito.md)
 - [Vaatimusmäärittely](./Documents/vaatimusmaarittely.md)
 - [Arkkitehtuuri](./Documents/arkkitehtuuri.md)
 
