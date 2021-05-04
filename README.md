@@ -8,6 +8,7 @@ Pisteitä saa nopeudesta, kaikkien hahmojen tuomisesta kentän loppuun ja viholl
 - [Tuntikirjanpito](./Documents/tuntikirjanpito.md)
 - [Vaatimusmäärittely](./Documents/vaatimusmaarittely.md)
 - [Arkkitehtuuri](./Documents/arkkitehtuuri.md)
+- [Käyttöohje](./Documents/kayttoohje.md)
 
 ### Release
 - [Release Viikko 5](https://github.com/juhkarhu/ot_harjoitustyo/releases/tag/viikko5)
