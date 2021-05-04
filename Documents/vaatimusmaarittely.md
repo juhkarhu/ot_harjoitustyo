@@ -15,10 +15,10 @@ Sovellus käynnistyy aloitusruutuun, josta voi valita haluamansa vaikeustason (v
 ### Toiminnallisuus
 - Käyttäjä voi valita vaikeustason
 - Käyttäjä voi valita pelinopeuden (turhake?)
-- Pelihahmo voi hyppiä ja ampua. 
-- Pelihahmon voi valita vapaasti kentällä olevista mahdollisista hahmoista (ei kuitenkaan vihollisia).
+- Pelihahmo voi hyppiä ja ampua. tehty
+- Pelihahmon voi valita vapaasti kentällä olevista mahdollisista hahmoista (ei kuitenkaan vihollisia). tehty
 - Viholliset menettävät tajunnan mutta heräävät takaisin jonkin ajan kuluttua. tehty
-- Kentässä on tietty aikaraja.
+- Kentässä on tietty aikaraja. tehty
 - Aloitusruudun sivussa on highscore-lista, johon valitaan oma nimi pelin alussa. tehty
 
 
