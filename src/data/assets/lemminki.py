@@ -34,7 +34,7 @@ class Lemminki(pygame.sprite.Sprite): #pylint: disable=too-many-instance-attribu
         self.conscious = True
         self.cooldown_tracker = 0
 
-        self.hitpoints = 2
+        self.hitpoints = 3
         self.invincible = True
         self.last_collide = 0
         self.current_time = pygame.time.get_ticks()
@@ -100,10 +100,11 @@ class Lemminki(pygame.sprite.Sprite): #pylint: disable=too-many-instance-attribu
         self.control = False
 
     def get_hit_player(self):
-        if self.immune(): 
-            return
-        self.hitpoints -= 1
-        self.last_collide = pygame.time.get_ticks()
+        # if self.immune():
+        #     return
+        if not self.immune():
+            self.hitpoints -= 1
+            self.last_collide = pygame.time.get_ticks()
         if self.hitpoints == 0:
             return True
 
@@ -223,10 +224,10 @@ class Lemminki(pygame.sprite.Sprite): #pylint: disable=too-many-instance-attribu
         '''
         Updates the character position on the screen.
         '''
-        # Only conscious characters can move. 
+        # Only conscious characters can move.
         if self.conscious:
             self.update_conscious_position(tile_rects)
-
+        
             # Drawing methods for the player and thrown rocks
             # self.thrown_rocks.update()
             # self.thrown_rocks.draw(display)

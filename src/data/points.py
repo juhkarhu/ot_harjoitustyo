@@ -10,13 +10,13 @@ def write_points(username, points):
     Parameters are username and points.
     '''
     try:
-        with open('score.txt', mode='a') as score_file:
+        with open('score.txt', mode='a', newline='') as score_file:
             writer = csv.writer(score_file)
             writer.writerow([username, points])
     except FileNotFoundError:
         with open('score.txt', mode='w') as score_file:
             writer = csv.writer(score_file)
-            writer.writerow([username, points])
+            writer.writerow((username, points))
 
 
 def read_points():
@@ -29,6 +29,4 @@ def read_points():
         for row in reader:
             high_score.append((row[0], int(row[1])))
         high_score.sort(key=lambda tup: tup[1], reverse=True)
-        # for x in high_score:
-        #     print(x)
     return high_score

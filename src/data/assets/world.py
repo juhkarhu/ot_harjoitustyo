@@ -3,6 +3,9 @@ import pygame.locals
 import data.settings
 
 
+'''
+World objects are created from the classes shown here.
+'''
 
 
 

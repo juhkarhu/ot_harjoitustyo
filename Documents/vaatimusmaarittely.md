@@ -20,6 +20,7 @@ Sovellus käynnistyy aloitusruutuun, josta voi valita haluamansa vaikeustason (v
 - Viholliset menettävät tajunnan mutta heräävät takaisin jonkin ajan kuluttua. tehty
 - Kentässä on tietty aikaraja. tehty
 - Aloitusruudun sivussa on highscore-lista, johon valitaan oma nimi pelin alussa. tehty
+- Jokaisella pelaajan ohjaamalla hahmolla on erilliset hitpointit, jotka vähenevät jos pelaaja osuu viholliseen. tehty 4.5.
 
 
 ### Jatkokehitysideoita

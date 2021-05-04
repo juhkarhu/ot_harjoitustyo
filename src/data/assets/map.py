@@ -1,11 +1,17 @@
 import os
 import pygame
-import data.settings 
-from data.assets import lemminki, world 
+import data.settings
+from data.assets import lemminki, world
+
+'''
+Class for handling game map data.
+Map data dictates enemy, tile and door positioning as well as player starting position.
+In the future, this could be extended to include more maps, as they are simple enough to make.
+'''
+
 
 class Map:
     def __init__(self):
-
         self.load_dirt_image()
         self.load_grass_image()
 
@@ -84,6 +90,9 @@ class Map:
         10 is the starting locations for the player,
         8 is the door that finishes the level.
         '''
+        self.npc_list.empty()
+        self.map_sprites.empty()
+        self.door_list.empty()
 
         self.tile_rects = []
         for row_num, row in enumerate(self.game_map):

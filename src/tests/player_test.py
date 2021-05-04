@@ -71,7 +71,7 @@ class TestPlayerClass(unittest.TestCase):
         # Player can be taken control of
         self.new_player.take_control()
         self.assertTrue(self.new_player.control)
-
+        # Player can move to the right
         self.new_player.update(self.screen, self.tile_rects, False, True, False, False)
         self.assertEqual(self.new_player.direction, 1)
 
@@ -79,8 +79,21 @@ class TestPlayerClass(unittest.TestCase):
         # Player can be taken control of
         self.new_player.take_control()
         self.assertTrue(self.new_player.control)
-
+        # Player can move to the left
         self.new_player.update(self.screen, self.tile_rects, True, False, False, False)
         self.assertEqual(self.new_player.direction, -1)
+
+    def test_player_gets_hit(self):
+        hitpoints_at_first = self.new_player.get_hitpoints()
+        self.new_player.get_hit_player()
+        hitpoints_after = self.new_player.get_hitpoints()
+        self.assertEqual(hitpoints_at_first, hitpoints_after)
+
+    def test_ai_unconscious_movement(self):
+        move_counter_before = self.new_npc.move_counter
+        self.new_npc.ai_movement(self.screen, self.tile_rects, False, True, False, False)
+        move_counter_after = self.new_npc.move_counter
+        self.assertEqual(move_counter_before, move_counter_after - 1)
+
 
         
