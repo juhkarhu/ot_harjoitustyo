@@ -3,6 +3,7 @@ Lataa projektin viimeisimm채n releasen l채hdekoodi etusivun sivupalkissa n채kyv�
 
 ### Ohjelman k채ynnist채minen
 ** Seuraavat komennot tulee suorittaa projektin src-kansiosssa.**
+
 Ennen ohjelman k채ynnistyst채 tulee asentaa tarvittavat riippuvuudet seuraavalla komennolla:
 ```bash
 poetry install
