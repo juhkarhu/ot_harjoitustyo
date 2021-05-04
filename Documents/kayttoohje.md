@@ -3,6 +3,7 @@ Lataa projektin viimeisimmän releasen lähdekoodi etusivun sivupalkissa näkyv�
 
 ### Ohjelman käynnistäminen
 ** Seuraavat komennot tulee suorittaa projektin src-kansiosssa.**
+
 Ennen ohjelman käynnistystä tulee asentaa tarvittavat riippuvuudet seuraavalla komennolla:
 ```bash
 poetry install
@@ -19,4 +20,4 @@ Peli käynnistyy etusivulle:
 Etusivulla voit kirjoittaa käyttäjänimen pelin pistetaulukkoa varten (voit myös pyyhkiä virhelyönnit nimestäsi). Etusivu opastaa pelissä käytetyt näppäin- ja hiirikomennot. 
 
 Kun painat Enteriä, niin peli alkaa ja näkymä muuttuu jotakuinkin seuraavanlaiseksi:
-![Peliruutu](./images/peliruutu.JPG)
+![Peliruutu](./images/peliruutu.png)

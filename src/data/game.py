@@ -75,7 +75,7 @@ class Game:
         self.npc_list = None
         self.map_sprites = None
         self.door_list = None
-        
+
         self.tile_rects = self.map.read_map_data()
         self.npc_list = self.map.get_npc_list()
         self.map_sprites = self.map.get_map_sprites()
@@ -259,8 +259,8 @@ class Game:
                 self.counter -= 1
                 if self.counter > 0:
                     self.text = str(self.counter).rjust(3)
-                # else:
-                #TODO What happens if the time runs out before the player is done?
+                else:
+                    self.intro_loop()
 
             if event.type == MOUSEBUTTONDOWN:
                 self.x, self.y = event.pos
@@ -353,7 +353,7 @@ class Game:
         for player in self.player_sprites:
             player.update(self.screen, self.tile_rects, self.left,
                           self.right, self.jump, self.shoot)
-            
+
         for npc in self.npc_list:
             npc.ai_movement(self.screen, self.tile_rects, self.left,
                    self.right, self.jump, self.shoot)
@@ -362,7 +362,7 @@ class Game:
             f'Score: {self.points}', True, data.settings.BLACK)
         time = self.game_font.render(
             f'Time: {self.text}', True, data.settings.BLACK)
-        
+
         if self.control:
             hitpoints = self.game_font.render(
                 f'Hitpoints: {self.player.get_hitpoints()}', True, data.settings.BLACK)
@@ -371,4 +371,3 @@ class Game:
         self.screen.blit(score, (60, 50))
         self.screen.blit(time, (790, 50))
         pygame.display.flip()
-    
