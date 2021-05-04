@@ -74,6 +74,8 @@ class Game:
         self.interval = 1600
         self.add_lemming = pygame.USEREVENT + 1
         pygame.time.set_timer(self.add_lemming, self.interval)
+        self.invulnerable = pygame.USEREVENT + 2
+        pygame.time.set_timer(self.invulnerable, 3000)
 
 
     def load_tile_images(self):
@@ -85,7 +87,7 @@ class Game:
         self.points = 0
         # Countdown timer for level
         self.counter, self.text = 80, '80'.rjust(3)
-        pygame.time.set_timer(pygame.USEREVENT, 1000)
+        self.timer = pygame.time.set_timer(pygame.USEREVENT, 1000)
 
         # Variables for sprite lists and all players spawn check
         self.all_players_spawned = False
@@ -274,7 +276,7 @@ class Game:
                     self.shoot = False
                 if event.key == pygame.K_w:
                     self.jump = False
-
+                
             if event.type == pygame.USEREVENT:
                 self.counter -= 1
                 if self.counter > 0:
@@ -339,7 +341,7 @@ class Game:
                     self.player.kill()
                     self.check_control_conditions(self.player)
                     if self.all_players_spawned and len(self.player_sprites) == 0:
-                        self.clock.tick(0)
+                        # self.clock.tick(0)
                         self.points += (self.counter * 100)
                         if self.typed_username:
                             data.points.write_points(self.name, self.points)
@@ -355,9 +357,20 @@ class Game:
                     npc.get_hit_enemy()
                     self.points += 100
 
+        if self.control:
+            for enemy in self.npc_list:
+                if enemy.get_conscious_state():
+                    if self.player.rect.colliderect(enemy.rect):
+                        is_dead = self.player.get_hit_player()
+                        if is_dead:
+                            self.player.kill()
+                            self.check_control_conditions(self.player)
+
+
         for player in self.player_sprites:
             player.update(self.screen, self.tile_rects, self.left,
                           self.right, self.jump, self.shoot)
+            
         for npc in self.npc_list:
             npc.ai_movement(self.screen, self.tile_rects, self.left,
                    self.right, self.jump, self.shoot)
@@ -366,6 +379,12 @@ class Game:
             f'Score: {self.points}', True, data.settings.BLACK)
         time = self.game_font.render(
             f'Time: {self.text}', True, data.settings.BLACK)
+        
+        if self.control:
+            hitpoints = self.game_font.render(
+                f'Hitpoints: {self.player.get_hitpoints()}', True, data.settings.BLACK)
+            self.screen.blit(hitpoints, (60,80))
+
         self.screen.blit(score, (60, 50))
         self.screen.blit(time, (790, 50))
         pygame.display.flip()
