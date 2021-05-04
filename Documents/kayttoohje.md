@@ -2,7 +2,7 @@
 Lataa projektin viimeisimmän releasen lähdekoodi etusivun sivupalkissa näkyvästä linkistä. 
 
 ### Ohjelman käynnistäminen
-** Seuraavat komennot tulee suorittaa projektin src-kansiosssa.**
+_Seuraavat komennot tulee suorittaa projektin src-kansiosssa._
 
 Ennen ohjelman käynnistystä tulee asentaa tarvittavat riippuvuudet seuraavalla komennolla:
 ```bash
