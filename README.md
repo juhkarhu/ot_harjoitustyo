@@ -13,6 +13,7 @@ Pisteitä saa nopeudesta, kaikkien hahmojen tuomisesta kentän loppuun ja viholl
 ### Release
 - [Release Viikko 5](https://github.com/juhkarhu/ot_harjoitustyo/releases/tag/viikko5)
 - [Release Viikko 6](https://github.com/juhkarhu/ot_harjoitustyo/releases/tag/viikko6)
+- [Release Viikko 7](https://github.com/juhkarhu/ot_harjoitustyo/releases/tag/viikko7)
 
 ### Komentorivitoiminnot
 #### Ohjelman suorittaminen
