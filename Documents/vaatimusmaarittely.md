@@ -6,21 +6,19 @@ Peli on yksinkertainen tasohyppely, johon on otettu vaikutteita Lemmingsistä. P
 Pisteitä saa nopeudesta, kaikkien hahmojen tuomisesta kentän loppuun ja vihollisten tuhoamisesta. 
 
 ### Aloitusruutuluonnos
-Sovellus käynnistyy aloitusruutuun, josta voi valita haluamansa vaikeustason (vaikuttaa ainakin pelaajan hahmojen hitpointteihin). 
+Sovellus käynnistyy aloitusruutuun, jossa pelaaja voi kirjoittaa käyttämänsä käyttäjänimen joka tallennetaan pelin High Score -listaan. 
 ![aloitusruutu](https://user-images.githubusercontent.com/62934996/112617265-67bc5380-8e2d-11eb-96ee-487f88889ac0.png)
 
 
 
 
 ### Toiminnallisuus
-- Käyttäjä voi valita vaikeustason
-- Käyttäjä voi valita pelinopeuden (turhake?)
+- Käyttäjä voi valita käyttäjänimensä High Score -listaa varten, joka on näkyvissä aloitusruudussa
 - Pelihahmo voi hyppiä ja ampua. 
-- Pelihahmon voi valita vapaasti kentällä olevista mahdollisista hahmoista (ei kuitenkaan vihollisia).
-- Viholliset menettävät tajunnan mutta heräävät takaisin jonkin ajan kuluttua. tehty
+- Pelihahmon voi valita vapaasti kentällä olevista mahdollisista hahmoista (ei kuitenkaan vastustajista)
+- Kun pelaaja osuu viholliseen kivellä, niin ne menettävät tajuntansa mutta heräävät takaisin muutaman sekunnin kuluttua 
 - Kentässä on tietty aikaraja.
-- Aloitusruudun sivussa on highscore-lista, johon valitaan oma nimi pelin alussa. tehty
-
+- Pisteitä jaetaan käytetyn ajan, pelastettujen hahmojen ja vihollisten iskemisestä kivellä
 
 ### Jatkokehitysideoita
 - Kenttäeditori
