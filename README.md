@@ -17,7 +17,7 @@ Pisteitä saa nopeudesta, kaikkien hahmojen tuomisesta kentän loppuun ja viholl
 
 ### Komentorivitoiminnot
 #### Ohjelman suorittaminen
-Ohjelma ainut vaatimus on pygame-kirjasto.
+Ohjelma ainut vaatimus on pygame-kirjasto.  
 *Komennot tulee ajaa src-kansiossa ollessa.*
 
 Asenna riippuvuudet:
