@@ -58,13 +58,20 @@ class TestPlayerClass(unittest.TestCase):
         self.assertFalse(self.new_player.control)
 
     def test_characters_are_controlled_automatically(self):
+        # X positions can not be the same if player is not controlled, since the character is moving.
         self.assertFalse(self.new_player.control)
         self.assertFalse(self.new_npc.control)
         self.assertEqual(self.new_npc.direction, 1)
 
+    def test_ai_movement_works(self):
+        previous_x_position = self.new_npc.rect.x
+        self.new_npc.ai_movement(self.screen, self.tile_rects, False, False, False, False)
+        self.assertNotEqual(previous_x_position, self.new_npc.rect.x)
+
     def test_enemy_gets_hit(self):
         self.assertTrue(self.new_npc.conscious)
         self.new_npc.get_hit_enemy()
+        self.new_npc.ai_movement(self.screen, self.tile_rects, False, False, False, False)
         self.assertFalse(self.new_npc.conscious)
 
     def test_player_can_move_right(self):
@@ -80,9 +87,23 @@ class TestPlayerClass(unittest.TestCase):
         self.new_player.take_control()
         self.assertTrue(self.new_player.control)
         # Player can move to the left
-        self.new_player.update(self.screen, self.tile_rects, True, False, False, False)
+        # Player position has changed
+        previous_x_position = self.new_player.rect.x
+        self.new_player.update(self.screen, self.tile_rects, True, False, True, False)
+        self.assertNotEqual(previous_x_position, self.new_player.rect.x)
         self.assertEqual(self.new_player.direction, -1)
 
+    def test_player_can_move_right(self):
+        # Player can be taken control of
+        self.new_player.take_control()
+        self.assertTrue(self.new_player.control)
+        # Player can move to the right
+        # Player position has changed
+        previous_x_position = self.new_player.rect.x
+        self.new_player.update(self.screen, self.tile_rects, False, True, False, False)
+        self.assertNotEqual(previous_x_position, self.new_player.rect.x)
+        self.assertEqual(self.new_player.direction, 1)
+        
     def test_player_gets_hit(self):
         hitpoints_at_first = self.new_player.get_hitpoints()
         self.new_player.get_hit_player()

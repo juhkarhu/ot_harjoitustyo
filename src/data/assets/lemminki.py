@@ -71,7 +71,6 @@ class Lemminki(pygame.sprite.Sprite): #pylint: disable=too-many-instance-attribu
                 img = pygame.image.load(f'img/{character_type}/{animation}/{i}.png').convert_alpha()
                 img = pygame.transform.scale(
                     img, (int(img.get_width() * scale), int(img.get_height() * scale)))
-                # img.set_colorkey((255,255,255))
                 temp_list.append(img)
             self.animation_list.append(temp_list)
         self.image = self.animation_list[self.action][self.frame_index]
@@ -100,8 +99,6 @@ class Lemminki(pygame.sprite.Sprite): #pylint: disable=too-many-instance-attribu
         self.control = False
 
     def get_hit_player(self):
-        # if self.immune():
-        #     return
         if not self.immune():
             self.hitpoints -= 1
             self.last_collide = pygame.time.get_ticks()
@@ -164,7 +161,6 @@ class Lemminki(pygame.sprite.Sprite): #pylint: disable=too-many-instance-attribu
                 self.direction = 1
             if shoot:
                 pass
-                # self.throw_rock()
             self.moving_left = left
             self.moving_right = right
 
@@ -229,8 +225,6 @@ class Lemminki(pygame.sprite.Sprite): #pylint: disable=too-many-instance-attribu
             self.update_conscious_position(tile_rects)
         
             # Drawing methods for the player and thrown rocks
-            # self.thrown_rocks.update()
-            # self.thrown_rocks.draw(display)
         self.image = pygame.transform.flip(self.image, self.flip, False)
         self.image.set_colorkey((255, 255, 255))
         display.blit(self.image, (self.rect.x, self.rect.y))
@@ -285,7 +279,6 @@ class Lemminki(pygame.sprite.Sprite): #pylint: disable=too-many-instance-attribu
             self.update_time = pygame.time.get_ticks()
         if self.frame_index >= len(self.animation_list[self.action]):
             self.frame_index = 0
-        # self.mask = pygame.mask.from_surface(self.image)
 
     def update_action(self, new_action):
         '''

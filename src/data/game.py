@@ -100,10 +100,11 @@ class Game:
     def set_introdisplay_settings(self):
         '''
         Sets the display settings for menu.
+        
+        Screen size is the same as the game map.
+        This could be smaller but then the windows position shifts
+        when game is started and that looks and feels bad.
         '''
-        # Screen size is the same as the game map.
-        # This could be smaller but then the windows position shifts
-        # when game is started and that looks and feels bad.
         data.settings.SCREEN_HEIGHT = data.settings.SCALA * 19
         data.settings.SCREEN_WIDTH = data.settings.SCALA * 20
         self.window_size = (data.settings.SCREEN_HEIGHT,
