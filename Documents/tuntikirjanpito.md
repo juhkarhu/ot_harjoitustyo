@@ -12,5 +12,6 @@
 |20.4.	|   5   | pylint, aloitusruutu, pisteiden- ja ajanlasku, pistelista
 |26.4.  |   4   | linttausta, viholliseen osuminen jäädyttää sen hetkeksi
 |27.4.  |   4   | linttausta, testien lisäämistä, paketteihin jakamista ja pelilogiikan eriyttämistä
+|4.5.   |   2   | kirjoitusvirheiden korjausta, pelaajan hitpoints lisääminen
 
-Yhteensä: 34
+Yhteensä: 36

@@ -26,43 +26,11 @@ class Game:
         self.intro = True
         self.intro_loop()
 
-        # These are only for Pylint error handling
-        # Without these pylint gets error:
-        # W0201: Attribute 'player' defined outside __init__ (attribute-defined-outside-init)
-        self.player = None
-        self.player_id = None
-        self.throw_cooldown = None
-        self.control = None
-        self.left = None
-        self.right = None
-        self.jump = None
-        self.shoot = None
-        self.interval = None
-        self.add_lemming = None
-        self.grass_image = None
-        self.dirt_image = None
-        self.max_players = None
-        self.points = None
-        self.counter = None
-        self.text = None
-        self.thrown_rocks = None
-        self.player_sprites = None
-        self.tile_rects = None
-        self.door_list = None
-        self.map_sprites = None
-        self.npc_list = None
-        self.window_size = None
-        self.height = None
-        self.width = None
-        self.screen = None
-        self.x = None
-        self.y = None
-        self.all_players_spawned = None
-        self.num_of_players_spawned = None
-        self.controlled_player_list = None
-
 
     def set_player_variables(self):
+        '''
+        Setting up variables that are used for player actions.
+        '''
         self.player = None
         self.player_id = 0
         self.throw_cooldown = 0
@@ -74,18 +42,26 @@ class Game:
         self.interval = 1600
         self.add_lemming = pygame.USEREVENT + 1
         pygame.time.set_timer(self.add_lemming, self.interval)
+        self.invulnerable = pygame.USEREVENT + 2
+        pygame.time.set_timer(self.invulnerable, 3000)
 
 
     def load_tile_images(self):
+        '''
+        Get images used for certain tiles.
+        '''
         self.grass_image = self.map.load_grass_image()
         self.dirt_image = self.map.load_dirt_image()
 
     def set_game_variables(self):
+        '''
+        Setting up variables that are used for game actions.
+        '''
         self.max_players = 3
         self.points = 0
         # Countdown timer for level
         self.counter, self.text = 80, '80'.rjust(3)
-        pygame.time.set_timer(pygame.USEREVENT, 1000)
+        self.timer = pygame.time.set_timer(pygame.USEREVENT, 1000)
 
         # Variables for sprite lists and all players spawn check
         self.all_players_spawned = False
@@ -95,10 +71,15 @@ class Game:
         self.controlled_player_list = []
 
         # Related to map, so they are handled in map.py
+        self.tile_rects = None
+        self.npc_list = None
+        self.map_sprites = None
+        self.door_list = None
+
+        self.tile_rects = self.map.read_map_data()
         self.npc_list = self.map.get_npc_list()
         self.map_sprites = self.map.get_map_sprites()
         self.door_list = self.map.get_door_list()
-        self.tile_rects = self.map.read_map_data()
 
 
     def set_gamedisplay_settings(self):
@@ -140,7 +121,6 @@ class Game:
         points_list = data.points.read_points()
         self.name = ''
         self.typed_username = False
-        font = pygame.font.Font(None, 50)
         while self.intro:
             self.screen.fill(data.settings.SKYBLUE)
             for tapahtuma in pygame.event.get():
@@ -220,7 +200,7 @@ class Game:
                 self.screen.blit(top_score_text, top_score_text_rect)
             else:
                 high_score_missing_text = self.intro_text_font.render(
-                    'High scores will show once you have cleared the level 3 times!', 
+                    'High scores will show once you have cleared the level 3 times!',
                     True, data.settings.RED)
                 high_score_missing_text_rect = high_score_missing_text.get_rect(
                     center=(data.settings.SCREEN_WIDTH/2, data.settings.SCREEN_HEIGHT/2+250))
@@ -279,8 +259,8 @@ class Game:
                 self.counter -= 1
                 if self.counter > 0:
                     self.text = str(self.counter).rjust(3)
-                # else:
-                #TODO What happens if the time runs out before the player is done?
+                else:
+                    self.intro_loop()
 
             if event.type == MOUSEBUTTONDOWN:
                 self.x, self.y = event.pos
@@ -294,7 +274,8 @@ class Game:
                 if self.num_of_players_spawned < self.max_players:
                     identifier = os.urandom(16).hex()
                     new_player = lemminki.Lemminki(
-                        'player', data.settings.CHARACTER_SCALE , (self.map.get_starting_position()), 
+                        'player', data.settings.CHARACTER_SCALE,
+                        (self.map.get_starting_position()),
                         identifier)
                     self.player_sprites.add(new_player)
                     self.num_of_players_spawned += 1
@@ -319,6 +300,9 @@ class Game:
 
 
     def game_loop(self):
+        '''
+        The main game loop. Calls all the needed functions for the game to work.
+        '''
         while True:
             if self.throw_cooldown > 0:
                 self.throw_cooldown -= 1
@@ -328,22 +312,33 @@ class Game:
 
 
     def draw_screen(self):
+        '''
+        Method for drawing objects to the screen.
+        Handles collision detection also, which probably should be moved elsewhere.
+        '''
         self.screen.fill(data.settings.SKYBLUE)
         self.map_sprites.draw(self.screen)
         self.thrown_rocks.update()
         self.thrown_rocks.draw(self.screen)
         if self.control:
-            for door in self.door_list:
-                if self.player.rect.colliderect(door.rect):
-                    self.points += 1000
-                    self.player.kill()
-                    self.check_control_conditions(self.player)
-                    if self.all_players_spawned and len(self.player_sprites) == 0:
-                        self.clock.tick(0)
-                        self.points += (self.counter * 100)
-                        if self.typed_username:
-                            data.points.write_points(self.name, self.points)
-                        self.intro_loop()
+            for enemy in self.npc_list:
+                if enemy.get_conscious_state():
+                    if self.player.rect.colliderect(enemy.rect):
+                        is_dead = self.player.get_hit_player()
+                        if is_dead:
+                            self.player.kill()
+                            self.check_control_conditions(self.player)
+            if self.player != None:
+                for door in self.door_list:
+                    if self.player.rect.colliderect(door.rect):
+                        self.points += 1000
+                        self.player.kill()
+                        self.check_control_conditions(self.player)
+                        if self.all_players_spawned and len(self.player_sprites) == 0:
+                            self.points += (self.counter * 100)
+                            if self.typed_username:
+                                data.points.write_points(self.name, self.points)
+                            self.intro_loop()
 
         for rock in self.thrown_rocks:
             for tile in self.tile_rects:
@@ -358,6 +353,7 @@ class Game:
         for player in self.player_sprites:
             player.update(self.screen, self.tile_rects, self.left,
                           self.right, self.jump, self.shoot)
+
         for npc in self.npc_list:
             npc.ai_movement(self.screen, self.tile_rects, self.left,
                    self.right, self.jump, self.shoot)
@@ -366,7 +362,12 @@ class Game:
             f'Score: {self.points}', True, data.settings.BLACK)
         time = self.game_font.render(
             f'Time: {self.text}', True, data.settings.BLACK)
+
+        if self.control:
+            hitpoints = self.game_font.render(
+                f'Hitpoints: {self.player.get_hitpoints()}', True, data.settings.BLACK)
+            self.screen.blit(hitpoints, (60,80))
+
         self.screen.blit(score, (60, 50))
         self.screen.blit(time, (790, 50))
         pygame.display.flip()
-    

@@ -9,5 +9,3 @@ class TestPointsClass(unittest.TestCase):
         data.points.write_points('testi', 10)
         scorelist_final = data.points.read_points()
         self.assertEqual(len(scorelist_beginning)+1, len(scorelist_final))
-
-    

@@ -5,17 +5,22 @@ Peli on yksinkertainen tasohyppely, johon on otettu vaikutteita Lemmingsistä. P
 Pisteitä saa nopeudesta, kaikkien hahmojen tuomisesta kentän loppuun ja vihollisten tuhoamisesta. 
 
 ### Dokumentaatio
-- [Tuntikirjanpito](./Documents/tuntukirjanpito.md)
+- [Tuntikirjanpito](./Documents/tuntikirjanpito.md)
 - [Vaatimusmäärittely](./Documents/vaatimusmaarittely.md)
 - [Arkkitehtuuri](./Documents/arkkitehtuuri.md)
+- [Käyttöohje](./Documents/kayttoohje.md)
+
+### Release
+- [Release Viikko 5](https://github.com/juhkarhu/ot_harjoitustyo/releases/tag/viikko5)
+- [Release Viikko 6](https://github.com/juhkarhu/ot_harjoitustyo/releases/tag/viikko6)
 
 ### Komentorivitoiminnot
 #### Ohjelman suorittaminen
-Ohjelma ainut vaatimus pygame-kirjasto.
+Ohjelma ainut vaatimus on pygame-kirjasto.
 *Komennot tulee ajaa src-kansiossa ollessa.*
 
 Asenna riippuvuudet:
-```bash
+```
 poetry install
 ```
 

@@ -5,6 +5,7 @@ Handles the character logic for player and enemy characters.
 import os
 import pygame
 import data.settings
+from datetime import datetime
 
 
 
@@ -32,7 +33,11 @@ class Lemminki(pygame.sprite.Sprite): #pylint: disable=too-many-instance-attribu
         self.thrown_rocks = pygame.sprite.Group()
         self.conscious = True
         self.cooldown_tracker = 0
-        self.clock = pygame.time.Clock()
+
+        self.hitpoints = 3
+        self.invincible = True
+        self.last_collide = 0
+        self.current_time = pygame.time.get_ticks()
 
         # These are defined as None for the sake of pylint
         # They are used elsewhere.
@@ -94,6 +99,23 @@ class Lemminki(pygame.sprite.Sprite): #pylint: disable=too-many-instance-attribu
         '''
         self.control = False
 
+    def get_hit_player(self):
+        # if self.immune():
+        #     return
+        if not self.immune():
+            self.hitpoints -= 1
+            self.last_collide = pygame.time.get_ticks()
+        if self.hitpoints == 0:
+            return True
+
+    def get_hitpoints(self):
+        return self.hitpoints
+
+    def immune(self):
+        return self.last_collide > pygame.time.get_ticks() - 3000
+
+    def get_conscious_state(self):
+        return self.conscious
 
     def get_hit_enemy(self):
         '''
@@ -111,6 +133,7 @@ class Lemminki(pygame.sprite.Sprite): #pylint: disable=too-many-instance-attribu
         AI controls the NPC characters and makes them walk for the
         length of two tiles with the help of update().
         '''
+
         if not self.conscious:
             self.update_action(1)
             self.update_animation()
@@ -133,6 +156,7 @@ class Lemminki(pygame.sprite.Sprite): #pylint: disable=too-many-instance-attribu
         Update is used for player controlled characters without the help of ai()-method.
         First we check if the character is controlled by the player
         '''
+        self.current_time = pygame.time.get_ticks()
         if self.control:
             if left:
                 self.direction = -1
@@ -200,10 +224,10 @@ class Lemminki(pygame.sprite.Sprite): #pylint: disable=too-many-instance-attribu
         '''
         Updates the character position on the screen.
         '''
-        # Only conscious characters can move. 
+        # Only conscious characters can move.
         if self.conscious:
             self.update_conscious_position(tile_rects)
-
+        
             # Drawing methods for the player and thrown rocks
             # self.thrown_rocks.update()
             # self.thrown_rocks.draw(display)
