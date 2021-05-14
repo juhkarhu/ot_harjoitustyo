@@ -3,13 +3,10 @@ import os
 import pygame
 import pygame.locals
 from pygame.constants import MOUSEBUTTONDOWN
-
 from data.assets import lemminki, world
-
 import data.settings
 import data.points
 from data.assets.map import Map
-
 
 class Game:
     def __init__(self):
