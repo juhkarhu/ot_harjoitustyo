@@ -1,18 +1,12 @@
-'''
-Handles the character logic for player and enemy characters.
-'''
-
 import os
 import pygame
 import data.settings
-from datetime import datetime
-
 
 
 class Lemminki(pygame.sprite.Sprite): #pylint: disable=too-many-instance-attributes
     # Disabled error message from standard pygame class
     '''
-    Initialization of the class.
+    Handles the character logic for player and enemy characters.
     '''
     def __init__(self, character_type, scale, starting_pos, id_number):
         super().__init__()
@@ -104,6 +98,7 @@ class Lemminki(pygame.sprite.Sprite): #pylint: disable=too-many-instance-attribu
             self.last_collide = pygame.time.get_ticks()
         if self.hitpoints == 0:
             return True
+        return False
 
     def get_hitpoints(self):
         return self.hitpoints
@@ -223,7 +218,6 @@ class Lemminki(pygame.sprite.Sprite): #pylint: disable=too-many-instance-attribu
         # Only conscious characters can move.
         if self.conscious:
             self.update_conscious_position(tile_rects)
-        
             # Drawing methods for the player and thrown rocks
         self.image = pygame.transform.flip(self.image, self.flip, False)
         self.image.set_colorkey((255, 255, 255))

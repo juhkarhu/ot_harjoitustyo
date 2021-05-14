@@ -27,6 +27,7 @@ class Game:
         self.intro_loop()
 
 
+
     def set_player_variables(self):
         '''
         Setting up variables that are used for player actions.
@@ -100,7 +101,7 @@ class Game:
     def set_introdisplay_settings(self):
         '''
         Sets the display settings for menu.
-        
+
         Screen size is the same as the game map.
         This could be smaller but then the windows position shifts
         when game is started and that looks and feels bad.
@@ -323,10 +324,10 @@ class Game:
         self.thrown_rocks.draw(self.screen)
         if self.control:
             for enemy in self.npc_list:
-                if enemy.get_conscious_state():
+                if enemy.get_conscious_state() and self.player != None:
                     if self.player.rect.colliderect(enemy.rect):
-                        is_dead = self.player.get_hit_player()
-                        if is_dead:
+                        if self.player.get_hit_player():
+                            self.points -= 500
                             self.player.kill()
                             self.check_control_conditions(self.player)
             if self.player != None:

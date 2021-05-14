@@ -26,7 +26,9 @@ def read_points():
     with open('score.txt', 'r') as score_file:
         reader = csv.reader(score_file)
         high_score = []
-        for row in reader:
-            high_score.append((row[0], int(row[1])))
+        if len(high_score) > 0:
+            for row in reader:
+                if (row[0] != 'testi'):
+                    high_score.append((row[0], int(row[1])))
         high_score.sort(key=lambda tup: tup[1], reverse=True)
     return high_score

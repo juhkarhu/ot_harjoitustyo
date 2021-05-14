@@ -3,14 +3,13 @@ import pygame
 import data.settings
 from data.assets import lemminki, world
 
-'''
-Class for handling game map data.
-Map data dictates enemy, tile and door positioning as well as player starting position.
-In the future, this could be extended to include more maps, as they are simple enough to make.
-'''
-
 
 class Map:
+    '''
+    Class for handling game map data.
+    Map data dictates enemy, tile and door positioning as well as player starting position.
+    In the future, this could be extended to include more maps, as they are simple enough to make.
+    '''
     def __init__(self):
         self.load_dirt_image()
         self.load_grass_image()
@@ -31,11 +30,11 @@ class Map:
             [1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-            [1, 0, 0, 2, 3, 0, 0, 0, 0, 0, 3, 2, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 2, 3, 0, 0, 0, 0, 0, 0, 2, 0, 3, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 2, 2, 2, 0, 0, 2, 2, 1, 2, 2, 2, 2, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 1],
-            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 8, 1],
             [1, 0, 10, 0, 0, 0, 0, 0, 0, 0, 2, 0, 2, 0, 2, 2, 2, 2, 2, 1],
             [1, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1],
             [1, 0, 0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
